@@ -3,6 +3,7 @@ package com.turkcell.rentacar.entities.concretes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.boot.jaxb.hbm.spi.JaxbHbmCollectionIdType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,17 +20,19 @@ public class Rent {
     @Column(name = "rent_id")
     private int rentId;
 
-    @Column(name = "rent_date")
-    private LocalDate rentDate;
+    @Column(name = "start_date")
+    private LocalDate rentStartDate;
 
-    @Column(name = "rent_return_date")
+    @Column(name = "return_date")
     private LocalDate rentReturnDate;
 
-    @Column(name = "usage_time")
-    private int usageTime;
+    @ManyToOne
+    @JoinColumn(name = "rented_city_id")
+    private City rentedCity;
 
-    @Column(name = "rent_status")
-    private boolean rentStatus;
+    @ManyToOne
+    @JoinColumn(name = "return_city_id")
+    private City returnCity;
 
     @ManyToOne()
     @JoinColumn(name = "car_id")
