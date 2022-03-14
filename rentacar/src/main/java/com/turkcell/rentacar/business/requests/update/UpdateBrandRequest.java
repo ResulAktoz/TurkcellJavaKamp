@@ -1,4 +1,4 @@
-package com.turkcell.rentacar.business.requests;
+package com.turkcell.rentacar.business.requests.update;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,9 +10,12 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeleteBrandRequest {
+public class UpdateBrandRequest {
 	@NotNull
 	@Min(1)
 	private int id;
+
+	@NotNull
+	private String name;
 
 }

@@ -1,11 +1,11 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.ColorService;
-import com.turkcell.rentacar.business.dtos.ColorListDto;
-import com.turkcell.rentacar.business.dtos.GetColorDto;
-import com.turkcell.rentacar.business.requests.CreateColorRequest;
-import com.turkcell.rentacar.business.requests.DeleteColorRequest;
-import com.turkcell.rentacar.business.requests.UpdateColorRequest;
+import com.turkcell.rentacar.business.dtos.listDto.ColorListDto;
+import com.turkcell.rentacar.business.dtos.getDto.GetColorDto;
+import com.turkcell.rentacar.business.requests.create.CreateColorRequest;
+import com.turkcell.rentacar.business.requests.delete.DeleteColorRequest;
+import com.turkcell.rentacar.business.requests.update.UpdateColorRequest;
 import com.turkcell.rentacar.core.exceptions.ColorAlreadyExistsException;
 import com.turkcell.rentacar.core.exceptions.ColorNotfoundException;
 import com.turkcell.rentacar.core.mapping.ModelMapperService;

@@ -2,8 +2,8 @@ package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.CarMaintenanceService;
 import com.turkcell.rentacar.business.abstracts.RentService;
-import com.turkcell.rentacar.business.dtos.RentListDto;
-import com.turkcell.rentacar.business.requests.CreateRentRequest;
+import com.turkcell.rentacar.business.dtos.listDto.RentListDto;
+import com.turkcell.rentacar.business.requests.create.CreateRentRequest;
 import com.turkcell.rentacar.core.exceptions.BusinessException;
 import com.turkcell.rentacar.core.mapping.ModelMapperService;
 import com.turkcell.rentacar.core.results.*;

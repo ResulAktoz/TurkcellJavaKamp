@@ -1,15 +1,13 @@
-package com.turkcell.rentacar.business.requests;
+package com.turkcell.rentacar.business.dtos.getDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateColorRequest {
-    @NotNull
+public class GetColorDto {
+    private int id;
     private String name;
 }

@@ -1,10 +1,10 @@
 package com.turkcell.rentacar.business.abstracts;
 
-import com.turkcell.rentacar.business.dtos.CarMaintenanceListDto;
-import com.turkcell.rentacar.business.dtos.GetCarMaintenanceDto;
-import com.turkcell.rentacar.business.requests.CreateCarMaintenanceRequest;
-import com.turkcell.rentacar.business.requests.DeleteCarMaintenanceRequest;
-import com.turkcell.rentacar.business.requests.UpdateCarMaintenanceRequest;
+import com.turkcell.rentacar.business.dtos.listDto.CarMaintenanceListDto;
+import com.turkcell.rentacar.business.dtos.getDto.GetCarMaintenanceDto;
+import com.turkcell.rentacar.business.requests.create.CreateCarMaintenanceRequest;
+import com.turkcell.rentacar.business.requests.delete.DeleteCarMaintenanceRequest;
+import com.turkcell.rentacar.business.requests.update.UpdateCarMaintenanceRequest;
 import com.turkcell.rentacar.core.results.DataResult;
 import com.turkcell.rentacar.core.results.Result;
 

@@ -1,10 +1,10 @@
 package com.turkcell.rentacar.business.abstracts;
 
-import com.turkcell.rentacar.business.dtos.GetBrandDto;
-import com.turkcell.rentacar.business.requests.DeleteBrandRequest;
-import com.turkcell.rentacar.business.requests.UpdateBrandRequest;
-import com.turkcell.rentacar.business.dtos.BrandListDto;
-import com.turkcell.rentacar.business.requests.CreateBrandRequest;
+import com.turkcell.rentacar.business.dtos.getDto.GetBrandDto;
+import com.turkcell.rentacar.business.requests.delete.DeleteBrandRequest;
+import com.turkcell.rentacar.business.requests.update.UpdateBrandRequest;
+import com.turkcell.rentacar.business.dtos.listDto.BrandListDto;
+import com.turkcell.rentacar.business.requests.create.CreateBrandRequest;
 import com.turkcell.rentacar.core.results.DataResult;
 import com.turkcell.rentacar.core.results.Result;
 
