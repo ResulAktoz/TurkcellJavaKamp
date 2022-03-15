@@ -1,17 +1,20 @@
 package com.turkcell.rentacar.entities.concretes;
 
+import com.turkcell.rentacar.entities.abstracts.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.boot.jaxb.hbm.spi.JaxbHbmCollectionIdType;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
+
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Table(name = "rents")
 public class Rent {
 
@@ -37,6 +40,16 @@ public class Rent {
     @ManyToOne()
     @JoinColumn(name = "car_id")
     private Car car;
+
+    @OneToMany(mappedBy = "rent")
+    private List<OrderedAdditionalService> orderedAdditionalServices;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToOne(mappedBy = "rent")
+    private Invoice invoice;
 
 
 

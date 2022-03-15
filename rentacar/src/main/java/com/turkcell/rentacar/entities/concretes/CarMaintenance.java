@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -20,13 +21,16 @@ public class CarMaintenance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "maintenance_id")
     private int id;
     @Column(name = "maintenance_description")
     private String description;
+
+    @Column(name = "maintenance_startDate")
+    private LocalDate startDate;
+
     @Column(name = "maintenance_returnDate")
-    private Date returnDate;
+    private LocalDate returnDate;
 
     @ManyToOne()
     @JoinColumn(name = "car_id")
