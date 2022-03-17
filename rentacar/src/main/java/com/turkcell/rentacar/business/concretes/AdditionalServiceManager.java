@@ -85,7 +85,7 @@ public class AdditionalServiceManager implements AdditionalServiceService {
     }
 
     private void checkIfAdditionalServiceIdExists(Integer id) throws BusinessException{
-        if(!this.additionalServiceDao.existByAdditionalServiceId(id)){
+        if(!this.additionalServiceDao.existsById(id)){
             throw new BusinessException("Bu id'ye ait ek hizmet yok.");
 
         }

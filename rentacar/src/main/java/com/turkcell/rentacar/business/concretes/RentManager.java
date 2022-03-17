@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,7 @@ public class RentManager implements RentService {
 
     @Override
     public Result add(CreateRentRequest createRentRequest) throws BusinessException {
-        this.carMaintenanceService.checkIfCarMaintenanceIdExist(createRentRequest.getCarId());
+        checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
         checkIfCarIsRented(createRentRequest.getCarId());
 
         Rent rent = this.modelMapperService.forRequest().map(createRentRequest, Rent.class);
@@ -105,6 +107,13 @@ public class RentManager implements RentService {
                         .map(rent, RentListDto.class))
                 .collect(Collectors.toList());
 
+        for (RentListDto rent: response) {
+            if(rent.getRentReturnDate()==null ||
+                    LocalDate.now().isBefore(rent.getRentReturnDate()) ||
+                    LocalDate.now().isEqual(rent.getRentReturnDate())){
+                throw new BusinessException("Araç şu anda kirada.");
+            }
+        }
     }
 
     @Override
@@ -112,6 +121,26 @@ public class RentManager implements RentService {
         if(!this.rentDao.existsById(id)){
             throw new BusinessException("Bu id'ye kayıtlı araba bulunamadı.");
         }
+    }
+
+    @Override
+    public double calculateRentPrice(int rentId) {
+        double differentCityPrice= 0;
+        if(!(this.rentDao.getById(rentId).getRentedCity().equals(this.rentDao.getById(rentId).getReturnCity()))){
+            differentCityPrice = 750;
+        }
+        long daysBetween = (ChronoUnit.DAYS.between(
+                this.rentDao.getById(rentId).getRentStartDate(), this.rentDao.getById(rentId).getRentReturnDate())+1);
+        double dailyPrice = this.rentDao.getById(rentId).getCar().getDailyPrice();
+        double totalRentPrice = (daysBetween * dailyPrice) +differentCityPrice;
+        return totalRentPrice;
+    }
+
+    private void checkIfCarIsAlreadyInMaintenance(int id) throws BusinessException{
+       if(!this.carMaintenanceService.checkIfCarMaintenanceIdExist(id)){
+           throw new BusinessException("Araba bakımda olduğundan kiralanamaz.");
+
+       }
     }
 
 

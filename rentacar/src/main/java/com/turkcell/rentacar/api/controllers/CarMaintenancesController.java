@@ -36,8 +36,8 @@ public class CarMaintenancesController {
     }
 
     @GetMapping("/getByCarMaintenanceId/{carMaintenanceId}")
-    public DataResult<GetCarMaintenanceDto> getByCarId(@PathVariable("carMaintenanceId") Integer id) {
-        return this.carMaintenanceService.getById(id);
+    public DataResult<List<CarMaintenanceListDto>> getByCarId(@PathVariable("carMaintenanceId") Integer id) {
+        return this.carMaintenanceService.getByCarId(id);
 
     }
 

@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.OrderedAdditionalServiceService;
+import com.turkcell.rentacar.business.abstracts.RentService;
 import com.turkcell.rentacar.business.dtos.getDto.GetOrderedAdditionalServiceDto;
 import com.turkcell.rentacar.business.dtos.listDto.OrderedAdditionalServiceListDto;
 import com.turkcell.rentacar.business.requests.create.CreateOrderedAdditionalServiceRequest;
@@ -14,6 +15,7 @@ import com.turkcell.rentacar.core.results.SuccessDataResult;
 import com.turkcell.rentacar.core.results.SuccessResult;
 import com.turkcell.rentacar.dataAccess.abstracts.OrderedAdditionalServiceDao;
 import com.turkcell.rentacar.entities.concretes.OrderedAdditionalService;
+import com.turkcell.rentacar.entities.concretes.Rent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +27,10 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 
     private OrderedAdditionalServiceDao orderedAdditionalServiceDao;
     private ModelMapperService modelMapperService;
+    private RentService rentService;
 
     @Autowired
-    public OrderedAdditionalServiceManager(OrderedAdditionalServiceDao orderedAdditionalServiceDao, ModelMapperService modelMapperService) {
+    public OrderedAdditionalServiceManager(OrderedAdditionalServiceDao orderedAdditionalServiceDao, ModelMapperService modelMapperService, RentService rentService) {
         this.orderedAdditionalServiceDao = orderedAdditionalServiceDao;
         this.modelMapperService = modelMapperService;
     }
@@ -93,9 +96,21 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
         return new SuccessDataResult<List<OrderedAdditionalServiceListDto>>(response, "Kiralama bilgisine göre ek hizmetler listelendi.");
     }
 
+    @Override
+    public double calculateOrderedServicePrice(int rentId) {
+        List<OrderedAdditionalService> result = this.orderedAdditionalServiceDao.findOrderedAdditionalServicesByRent_RentId(rentId);
+        double totalPrice = 0;
+
+        for(OrderedAdditionalService orderedAdditionalService : result){
+            totalPrice += orderedAdditionalService.getOrderedAdditionalServiceAmount() * orderedAdditionalService.getAdditionalService().getDailyPrice();
+        }
+        return totalPrice;
+    }
+
     private void checkIfOrderedAdditionalServiceIdExists(int id) throws BusinessException{
         if(!this.orderedAdditionalServiceDao.existsById(id)){
             throw new BusinessException("Bu id'ye kayıtlı sipariş bulunamadi.");
         }
     }
+
 }

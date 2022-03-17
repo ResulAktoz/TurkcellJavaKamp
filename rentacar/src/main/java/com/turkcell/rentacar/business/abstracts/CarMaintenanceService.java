@@ -17,7 +17,7 @@ public interface CarMaintenanceService {
     Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest);
     DataResult<List<CarMaintenanceListDto>> getListedCars();
     DataResult<List<CarMaintenanceListDto>> getByCarId(int id);
-    void checkIfCarMaintenanceIdExist(int id);
+    boolean checkIfCarMaintenanceIdExist(int id);
 
 
 

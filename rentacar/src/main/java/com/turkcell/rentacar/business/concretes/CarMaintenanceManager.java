@@ -117,10 +117,11 @@ public class CarMaintenanceManager implements CarMaintenanceService {
     }
 
 
-    public void checkIfCarMaintenanceIdExist(int id) {
+    public boolean checkIfCarMaintenanceIdExist(int id) throws BusinessException {
         if(!this.carMaintenanceDao.existsCarMaintenanceById(id)){
-            throw new BusinessException("Bu id'ye kayıtlı bakım bulunamadı.");
+           throw new BusinessException("Bu id'ye kayıtlı bakım bulunamadı.");
         }
+        return true;
     }
 
     private void checkIfCarIsAlreadyInMaintenanceIsSuccess(int id) {

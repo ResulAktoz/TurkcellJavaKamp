@@ -10,6 +10,6 @@ import java.util.List;
 public interface UserService {
 
     DataResult<List<UserListDto>> getAll() throws BusinessException;
-    DataResult<List<GetUserDto>> getByUserId(int userId) throws BusinessException;
+    DataResult<GetUserDto> getByUserId(int userId) throws BusinessException;
 
 }

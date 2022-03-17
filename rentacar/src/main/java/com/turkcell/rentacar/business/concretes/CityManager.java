@@ -79,7 +79,7 @@ public class CityManager implements CityService {
     }
 
     private void checkIfCityNameExists(String cityName) throws BusinessException{
-        if(this.cityDao.existByCity_CityName(cityName)){
+        if(this.cityDao.existsCityByCityName(cityName)){
             throw new BusinessException("Bu isimde şehir kayıtlı!");
 
         }

@@ -8,7 +8,9 @@ import com.turkcell.rentacar.business.requests.update.UpdateInvoiceRequest;
 import com.turkcell.rentacar.core.exceptions.BusinessException;
 import com.turkcell.rentacar.core.results.DataResult;
 import com.turkcell.rentacar.core.results.Result;
+import com.turkcell.rentacar.entities.concretes.Invoice;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface InvoiceService {
@@ -18,7 +20,7 @@ public interface InvoiceService {
     Result delete(DeleteInvoiceRequest deleteInvoiceRequest) throws BusinessException;
 
     DataResult<List<InvoiceListDto>> getAll() throws BusinessException;
-    DataResult<List<GetInvoiceDto>> getByInvoiceId(int invoiceId) throws BusinessException;
+    DataResult<GetInvoiceDto> getByInvoiceId(int invoiceId) throws BusinessException;
     DataResult<List<InvoiceListDto>> getByUserId(int userId) throws BusinessException;
-
+    DataResult<List<InvoiceListDto>> findByCreationDayBetween(LocalDate startDate, LocalDate endDate);
 }

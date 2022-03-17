@@ -24,4 +24,5 @@ public interface RentService {
 
     void checkIfCarIsRented(int carId) throws BusinessException;
     void checkIfRentIdExist(int id) throws BusinessException;
+    double calculateRentPrice(int rentId);
 }

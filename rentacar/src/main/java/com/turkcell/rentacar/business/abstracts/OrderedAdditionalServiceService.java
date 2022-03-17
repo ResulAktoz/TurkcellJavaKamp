@@ -22,4 +22,6 @@ public interface OrderedAdditionalServiceService {
     DataResult<List<OrderedAdditionalServiceListDto>> getAll() throws BusinessException;
     DataResult<GetOrderedAdditionalServiceDto> getByOrderedAdditionalServiceId(Integer id) throws BusinessException;
     DataResult<List<OrderedAdditionalServiceListDto>> getByRentId(Integer id);
+
+    double calculateOrderedServicePrice(int rentId);
 }

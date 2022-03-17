@@ -18,5 +18,5 @@ public interface IndividualCustomerService {
     Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) throws BusinessException;
 
     DataResult<List<IndividualCustomerListDto>> getAll() throws BusinessException;
-    DataResult<List<GetIndividualCustomerDto>> getByUserId(int userId) throws BusinessException;
+    DataResult<GetIndividualCustomerDto> getByUserId(int userId) throws BusinessException;
 }

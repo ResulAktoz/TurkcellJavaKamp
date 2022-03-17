@@ -9,15 +9,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Data
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Table(name = "individual_customers")
 public class IndividualCustomer extends Customer{
 
-    @Column(name = "irst_name")
+    @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")

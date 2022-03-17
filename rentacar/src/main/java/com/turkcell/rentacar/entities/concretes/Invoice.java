@@ -24,8 +24,8 @@ public class Invoice {
     @Column(name = "invoice_number")
     private String invoiceNumber;
 
-    @Column(name = "creation_day")
-    private LocalDate creationDay;
+    @Column(name = "creation_date")
+    private LocalDate creationDate;
 
     @Column(name = "rent_start_day")
     private LocalDate rentStartDate;
@@ -43,7 +43,7 @@ public class Invoice {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "rent_id")
     private Rent rent;
 }

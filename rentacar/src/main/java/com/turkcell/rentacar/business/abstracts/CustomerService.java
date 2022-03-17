@@ -11,5 +11,5 @@ import java.util.List;
 public interface CustomerService {
 
     DataResult<List<CustomerListDto>> getAll() throws BusinessException;
-    DataResult<List<GetCustomerDto>> getByUserId(int userId)  throws BusinessException;
+    void checkIfCustomerExists(int customerId) throws BusinessException;
 }
