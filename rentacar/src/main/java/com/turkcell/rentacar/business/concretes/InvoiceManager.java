@@ -31,7 +31,7 @@ public class InvoiceManager implements InvoiceService {
     private ModelMapperService modelMapperService;
     private RentService rentService;
     private OrderedAdditionalServiceService orderedAdditionalServiceService;
-
+    @Autowired
     public InvoiceManager(InvoiceDao invoiceDao, ModelMapperService modelMapperService,
                           @Lazy RentService rentService, OrderedAdditionalServiceService orderedAdditionalServiceService) {
         this.invoiceDao = invoiceDao;
@@ -40,7 +40,7 @@ public class InvoiceManager implements InvoiceService {
         this.orderedAdditionalServiceService = orderedAdditionalServiceService;
     }
 
-    @Autowired
+
 
 
     @Override
@@ -126,7 +126,7 @@ public class InvoiceManager implements InvoiceService {
 
 
     private void checkIfRentIdAlreadyExists(int rentId) throws BusinessException{
-        if(this.invoiceDao.existByRent_RentId(rentId)){
+        if(this.invoiceDao.existsByRent_RentId(rentId)){
             throw new BusinessException("Bu id'ye ait bir kiralama faturası mevcut.");
         }
     }

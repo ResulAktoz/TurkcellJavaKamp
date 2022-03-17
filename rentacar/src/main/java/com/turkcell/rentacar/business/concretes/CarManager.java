@@ -3,6 +3,7 @@ package com.turkcell.rentacar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.turkcell.rentacar.business.requests.update.UpdateCarKilometerInfoRequest;
 import com.turkcell.rentacar.core.exceptions.CarNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -107,6 +108,14 @@ public class CarManager implements CarService{
 			return new SuccessResult("Araba bulundu.");
 		}
 		return new ErrorResult("Araba bulunamadı");
+	}
+
+	@Override
+	public Result ıpdateKilometerInfo(UpdateCarKilometerInfoRequest updateCarKilometerInfoRequest) {
+		this.carDao.updateKilometerToCarByCarId(updateCarKilometerInfoRequest.getCarId(),
+				updateCarKilometerInfoRequest.getKilometerInfo());
+		return new SuccessResult("Kilometre bilgisi güncellendi.");
+
 	}
 
 

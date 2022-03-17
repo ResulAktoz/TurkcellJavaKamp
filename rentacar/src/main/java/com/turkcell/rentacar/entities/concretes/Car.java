@@ -13,6 +13,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "cars")
 public class Car {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +26,9 @@ public class Car {
 	private int modelYear;
 	@Column(name= "description")
 	private String description;
+
+	@Column(name = "kilometer_info")
+	private String kilometerInfo;
 	
 	@ManyToOne
 	@JoinColumn(name ="brand_id")
@@ -38,5 +42,8 @@ public class Car {
 	private List<CarMaintenance> carMaintenances;
 	@OneToMany(mappedBy = "car",cascade = CascadeType.ALL)
 	private List<Rent> rents;
+
+	@OneToMany(mappedBy = "car")
+	private List<CarDamage> carDamages;
 
 }

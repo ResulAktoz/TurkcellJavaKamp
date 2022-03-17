@@ -2,6 +2,7 @@ package com.turkcell.rentacar.business.abstracts;
 
 import java.util.List;
 
+import com.turkcell.rentacar.business.requests.update.UpdateCarKilometerInfoRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateCarRequest;
 import com.turkcell.rentacar.business.dtos.listDto.CarListDto;
 import com.turkcell.rentacar.business.dtos.getDto.GetCarDto;
@@ -17,6 +18,8 @@ public interface CarService {
     Result delete(DeleteCarRequest deleteCarRequest);
     Result update(UpdateCarRequest updateCarRequest);
     Result existByCarId(int id);
+    Result ıpdateKilometerInfo(UpdateCarKilometerInfoRequest updateCarKilometerInfoRequest);
+
     DataResult<List<CarListDto>> getAllPaged(int pageNumber, int pageSize);
     DataResult<List<CarListDto>> getAllSorted(String param);
     DataResult<List<CarListDto>> findByDailyPriceLessThan(double requestedPrice);

@@ -37,6 +37,12 @@ public class Rent {
     @JoinColumn(name = "return_city_id")
     private City returnCity;
 
+    @Column(name = "started_kilometer_info")
+    private String startedKilometerInfo;
+
+    @Column(name = "ended_kilometer_info")
+    private String endedKilometerInfo;
+
     @ManyToOne()
     @JoinColumn(name = "car_id")
     private Car car;

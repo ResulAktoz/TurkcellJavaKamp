@@ -15,4 +15,12 @@ public class DeleteInvoiceRequest {
     @NotNull
     @Min(1)
     private int invoiceId;
+
+    @NotNull
+    @Min(1)
+    private int userId;
+
+    @NotNull
+    @Min(1)
+    private int rentId;
 }

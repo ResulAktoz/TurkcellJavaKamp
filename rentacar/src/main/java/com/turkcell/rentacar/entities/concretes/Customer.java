@@ -6,9 +6,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -18,6 +20,8 @@ import javax.persistence.Table;
 @Table(name = "customers")
 public class Customer extends User {
 
+    @Column(name = "date_registered")
+    private LocalDate dateRegistered = LocalDate.now();
 
 
 }

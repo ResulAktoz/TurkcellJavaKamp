@@ -1,5 +1,4 @@
-package com.turkcell.rentacar.business.requests.create;
-
+package com.turkcell.rentacar.business.requests.update;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,13 +11,14 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateInvoiceRequest {
+public class UpdateCarKilometerInfoRequest {
 
     @NotNull
     @Min(1)
-    private int userId;
+    private int carId;
 
     @NotNull
-    @Min(1)
-    private int rentId;
+    @Size(min = 2)
+    private String kilometerInfo;
+
 }
