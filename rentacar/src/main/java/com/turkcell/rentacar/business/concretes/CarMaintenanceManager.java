@@ -107,7 +107,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
     @Override
     public DataResult<List<CarMaintenanceListDto>> getByCarId(int id) {
-        List<CarMaintenance> result = this.carMaintenanceDao.getByCar_Id(id);
+        List<CarMaintenance> result = this.carMaintenanceDao.getByCar_CarId(id);
         List<CarMaintenanceListDto> response = result.stream()
                 .map(carMaintenance -> this.modelMapperService
                         .forDto()

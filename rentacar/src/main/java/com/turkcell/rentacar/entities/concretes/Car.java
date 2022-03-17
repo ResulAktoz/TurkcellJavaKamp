@@ -18,7 +18,7 @@ public class Car {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name= "car_id")
-	private int id;
+	private int carId;
 	
 	@Column(name= "daily_price")
 	private double dailyPrice;
@@ -43,7 +43,7 @@ public class Car {
 	@OneToMany(mappedBy = "car",cascade = CascadeType.ALL)
 	private List<Rent> rents;
 
-	@OneToMany(mappedBy = "car")
+	@OneToMany(mappedBy = "car",cascade = CascadeType.ALL)
 	private List<CarDamage> carDamages;
 
 }

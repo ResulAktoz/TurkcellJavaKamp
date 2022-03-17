@@ -88,7 +88,7 @@ public class RentManager implements RentService {
 
     @Override
     public DataResult<List<RentListDto>> getByCarId(int carId) throws BusinessException {
-        List<Rent> rents = this.rentDao.getAllByCarId(carId);
+        List<Rent> rents = this.rentDao.getAllByCarCarId(carId);
 
         List<RentListDto> response = rents.stream()
                 .map(rent -> this.modelMapperService.forDto()
@@ -101,7 +101,7 @@ public class RentManager implements RentService {
     @Override
     public void checkIfCarIsRented(int carId) throws BusinessException {
 
-        List<Rent> result= this.rentDao.getAllByCarId(carId);
+        List<Rent> result= this.rentDao.getAllByCarCarId(carId);
         List<RentListDto> response= result.stream()
                 .map(rent -> this.modelMapperService.forDto()
                         .map(rent, RentListDto.class))

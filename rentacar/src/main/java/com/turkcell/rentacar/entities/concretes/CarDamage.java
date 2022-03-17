@@ -21,7 +21,8 @@ public class CarDamage {
     @Column(name = "damage_info")
     private String damageInfo;
 
-    @Column(name = "car_id")
+    @ManyToOne
+    @JoinColumn(name = "car_id")
     private Car car;
 
 

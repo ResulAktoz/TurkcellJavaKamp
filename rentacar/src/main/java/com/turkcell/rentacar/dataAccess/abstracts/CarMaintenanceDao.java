@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface CarMaintenanceDao extends JpaRepository<CarMaintenance,Integer> {
     boolean existsCarMaintenanceById(Integer id);
-    List<CarMaintenance> getByCar_Id(int id);
+    List<CarMaintenance> getByCar_CarId(int id);
     List<CarMaintenance> findCarMaintenanceByReturnDateIsNull();
 
 

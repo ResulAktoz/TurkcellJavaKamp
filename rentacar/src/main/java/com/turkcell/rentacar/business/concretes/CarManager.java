@@ -67,7 +67,7 @@ public class CarManager implements CarService{
 
 	@Override
 	public DataResult<GetCarDto> getByCarId(int id) {
-		if(carDao.existsCarById(id)) {
+		if(carDao.existsCarByCarId(id)) {
 		Car car = carDao.getById(id); //Optional<Car> car = carDao.findById(id);
         GetCarDto response = modelMapperService.forDto().map(car,GetCarDto.class);
         return new SuccessDataResult<GetCarDto>(response,"Id'ye göre listelendi");
@@ -79,7 +79,7 @@ public class CarManager implements CarService{
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) {
 	
-			if (this.carDao.existsCarById(deleteCarRequest.getId())) {
+			if (this.carDao.existsCarByCarId(deleteCarRequest.getId())) {
 					this.carDao.deleteById(deleteCarRequest.getId());
 					return new SuccessResult("Araba silindi.");
 			} else {
@@ -89,7 +89,7 @@ public class CarManager implements CarService{
 
 	@Override
 	public Result update(UpdateCarRequest updateCarRequest) {
-		if(carDao.existsCarById(updateCarRequest.getId())) {
+		if(carDao.existsCarByCarId(updateCarRequest.getId())) {
 		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		
 
@@ -104,7 +104,7 @@ public class CarManager implements CarService{
 
 	@Override
 	public Result existByCarId(int id) {
-		if(this.carDao.existsCarById(id)){
+		if(this.carDao.existsCarByCarId(id)){
 			return new SuccessResult("Araba bulundu.");
 		}
 		return new ErrorResult("Araba bulunamadı");

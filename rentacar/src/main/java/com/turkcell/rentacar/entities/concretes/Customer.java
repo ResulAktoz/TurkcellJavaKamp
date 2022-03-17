@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @PrimaryKeyJoinColumn(name = "user_id")
 @Table(name = "customers")

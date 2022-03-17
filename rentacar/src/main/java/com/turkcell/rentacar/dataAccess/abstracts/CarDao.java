@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CarDao extends JpaRepository<Car, Integer> {
 	
-	 boolean existsCarById(Integer id);
+	 boolean existsCarByCarId(Integer id);
 	 List<Car> findByDailyPriceLessThan(double requestPrice);
 	 List<Car> findByDailyPriceBetween (double maxValue, double minValue);
 
