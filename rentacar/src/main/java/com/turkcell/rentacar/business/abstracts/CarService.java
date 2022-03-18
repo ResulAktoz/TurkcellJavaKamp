@@ -18,7 +18,7 @@ public interface CarService {
     Result delete(DeleteCarRequest deleteCarRequest);
     Result update(UpdateCarRequest updateCarRequest);
     Result existByCarId(int id);
-    Result ıpdateKilometerInfo(UpdateCarKilometerInfoRequest updateCarKilometerInfoRequest);
+    Result updateKilometerInfo(UpdateCarKilometerInfoRequest updateCarKilometerInfoRequest);
 
     DataResult<List<CarListDto>> getAllPaged(int pageNumber, int pageSize);
     DataResult<List<CarListDto>> getAllSorted(String param);

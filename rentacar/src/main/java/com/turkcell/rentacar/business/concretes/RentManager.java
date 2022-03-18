@@ -27,23 +27,53 @@ public class RentManager implements RentService {
     private RentDao rentDao;
     private ModelMapperService modelMapperService;
     private CarMaintenanceService carMaintenanceService;
-    @Lazy
+
     @Autowired
-    public RentManager(RentDao rentDao, ModelMapperService modelMapperService, CarMaintenanceService carMaintenanceService) {
+    public RentManager(RentDao rentDao, ModelMapperService modelMapperService,
+                       @Lazy CarMaintenanceService carMaintenanceService) {
         this.rentDao = rentDao;
         this.modelMapperService = modelMapperService;
         this.carMaintenanceService = carMaintenanceService;
     }
 
-    @Override
+    /*
     public Result add(CreateRentRequest createRentRequest) throws BusinessException {
         checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
         checkIfCarIsRented(createRentRequest.getCarId());
 
-        Rent rent = this.modelMapperService.forRequest().map(createRentRequest, Rent.class);
+        Rent rent = this.modelMapperService.forRequest()
+                .map(createRentRequest, Rent.class);
         this.rentDao.save(rent);
 
         return new SuccessResult("Kiralama eklendi");
+
+    Genel olur mu ??
+    }
+     */
+
+    @Override
+    public Result addForCorporateCustomer(CreateRentRequest createRentRequest) throws BusinessException {
+        checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
+        checkIfCarIsRented(createRentRequest.getCarId());
+
+        Rent rent = this.modelMapperService.forRequest()
+                .map(createRentRequest, Rent.class);
+        this.rentDao.save(rent);
+
+        return new SuccessResult("Kurumsal müşteri için kiralama eklendi");
+
+    }
+
+    @Override
+    public Result addForIndividualCustomer(CreateRentRequest createRentRequest) throws BusinessException {
+        checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
+        checkIfCarIsRented(createRentRequest.getCarId());
+
+        Rent rent = this.modelMapperService.forRequest()
+                .map(createRentRequest, Rent.class);
+        this.rentDao.save(rent);
+
+        return new SuccessResult("Bireysel müşteri için kiralama eklendi");
     }
 
     @Override
@@ -76,7 +106,7 @@ public class RentManager implements RentService {
     }
 
     @Override
-    public DataResult<GetRentDto> getByRentId(int id) throws BusinessException {
+    public DataResult<GetRentDto> getRentDetailsByRentId(int id) throws BusinessException {
         checkIfRentIdExist(id);
 
         Rent rent = this.rentDao.getById(id);

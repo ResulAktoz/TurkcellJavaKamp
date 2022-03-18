@@ -14,12 +14,14 @@ import java.util.List;
 
 public interface RentService {
 
-    Result add(CreateRentRequest createRentRequest) throws BusinessException;
+    //Result add(CreateRentRequest createRentRequest) throws BusinessException;
+    Result addForCorporateCustomer(CreateRentRequest createRentRequest) throws BusinessException;
+    Result addForIndividualCustomer(CreateRentRequest createRentRequest) throws BusinessException;
     Result update(UpdateRentRequest updateRentRequest) throws BusinessException;
     Result delete(DeleteRentRequest deleteRentRequest) throws BusinessException;
 
     DataResult<List<RentListDto>> getAll() throws BusinessException;
-    DataResult<GetRentDto> getByRentId(int id) throws BusinessException;
+    DataResult<GetRentDto> getRentDetailsByRentId(int id) throws BusinessException;
     DataResult<List<RentListDto>> getByCarId(int carId) throws BusinessException;
 
     void checkIfCarIsRented(int carId) throws BusinessException;

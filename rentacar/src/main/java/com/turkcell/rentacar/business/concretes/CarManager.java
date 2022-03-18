@@ -111,7 +111,7 @@ public class CarManager implements CarService{
 	}
 
 	@Override
-	public Result ıpdateKilometerInfo(UpdateCarKilometerInfoRequest updateCarKilometerInfoRequest) {
+	public Result updateKilometerInfo(UpdateCarKilometerInfoRequest updateCarKilometerInfoRequest) {
 		this.carDao.updateKilometerToCarByCarId(updateCarKilometerInfoRequest.getCarId(),
 				updateCarKilometerInfoRequest.getKilometerInfo());
 		return new SuccessResult("Kilometre bilgisi güncellendi.");
