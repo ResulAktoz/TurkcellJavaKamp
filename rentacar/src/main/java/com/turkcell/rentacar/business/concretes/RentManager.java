@@ -9,7 +9,6 @@ import com.turkcell.rentacar.business.requests.delete.DeleteRentRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateRentRequest;
 import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
-import com.turkcell.rentacar.core.results.*;
 import com.turkcell.rentacar.core.utilities.results.DataResult;
 import com.turkcell.rentacar.core.utilities.results.Result;
 import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;

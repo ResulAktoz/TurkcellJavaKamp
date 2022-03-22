@@ -2,14 +2,13 @@ package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.BrandService;
 import com.turkcell.rentacar.business.dtos.getDto.GetBrandDto;
-import com.turkcell.rentacar.business.requests.delete.DeleteBrandRequest;
-import com.turkcell.rentacar.business.requests.update.UpdateBrandRequest;
 import com.turkcell.rentacar.business.dtos.listDto.BrandListDto;
 import com.turkcell.rentacar.business.requests.create.CreateBrandRequest;
+import com.turkcell.rentacar.business.requests.delete.DeleteBrandRequest;
+import com.turkcell.rentacar.business.requests.update.UpdateBrandRequest;
 import com.turkcell.rentacar.core.utilities.exceptions.BrandAlreadyExistsException;
 import com.turkcell.rentacar.core.utilities.exceptions.BrandNotFoundException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
-import com.turkcell.rentacar.core.results.*;
 import com.turkcell.rentacar.core.utilities.results.DataResult;
 import com.turkcell.rentacar.core.utilities.results.Result;
 import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;
