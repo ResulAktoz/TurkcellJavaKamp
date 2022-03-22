@@ -1,6 +1,6 @@
-package com.turkcell.rentacar.core.exceptions;
+package com.turkcell.rentacar.core.utilities.exceptions;
 
-import com.turkcell.rentacar.core.results.ErrorDataResult;
+import com.turkcell.rentacar.core.utilities.results.ErrorDataResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

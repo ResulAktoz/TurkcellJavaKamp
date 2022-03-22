@@ -57,6 +57,9 @@ public class Rent {
     @OneToOne(mappedBy = "rent")
     private Invoice invoice;
 
+    @OneToMany(mappedBy = "rent")
+    private List<Payment> payments;
+
 
 
 

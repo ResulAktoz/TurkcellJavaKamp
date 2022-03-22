@@ -1,4 +1,4 @@
-package com.turkcell.rentacar.core.exceptions;
+package com.turkcell.rentacar.core.utilities.exceptions;
 
 public class ColorNotfoundException extends BusinessException {
     public ColorNotfoundException(String s) {

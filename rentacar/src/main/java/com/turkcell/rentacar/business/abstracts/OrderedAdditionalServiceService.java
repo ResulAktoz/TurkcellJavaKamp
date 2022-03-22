@@ -2,14 +2,12 @@ package com.turkcell.rentacar.business.abstracts;
 
 import com.turkcell.rentacar.business.dtos.getDto.GetOrderedAdditionalServiceDto;
 import com.turkcell.rentacar.business.dtos.listDto.OrderedAdditionalServiceListDto;
-import com.turkcell.rentacar.business.requests.create.CreateAdditionalServiceRequest;
 import com.turkcell.rentacar.business.requests.create.CreateOrderedAdditionalServiceRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteOrderedAdditionalServiceRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateOrderedAdditionalServiceRequest;
-import com.turkcell.rentacar.core.exceptions.BusinessException;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
-import org.hibernate.loader.custom.ResultRowProcessor;
+import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 
 import java.util.List;
 

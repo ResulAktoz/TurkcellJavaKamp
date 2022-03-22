@@ -46,4 +46,8 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "rent_id")
     private Rent rent;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
 }

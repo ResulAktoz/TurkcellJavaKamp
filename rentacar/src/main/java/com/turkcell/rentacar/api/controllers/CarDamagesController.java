@@ -5,8 +5,8 @@ import com.turkcell.rentacar.business.dtos.listDto.CarDamageListDto;
 import com.turkcell.rentacar.business.requests.create.CreateCarDamageRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteCarDamageRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateCarDamageRequest;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

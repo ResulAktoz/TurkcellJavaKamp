@@ -8,8 +8,8 @@ import com.turkcell.rentacar.business.dtos.listDto.CarListDto;
 import com.turkcell.rentacar.business.dtos.getDto.GetCarDto;
 import com.turkcell.rentacar.business.requests.create.CreateCarRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteCarRequest;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 
 public interface CarService {
 	DataResult<List<CarListDto>> getAll();

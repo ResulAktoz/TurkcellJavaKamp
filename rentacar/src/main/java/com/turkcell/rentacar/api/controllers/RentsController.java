@@ -6,15 +6,10 @@ import com.turkcell.rentacar.business.dtos.listDto.RentListDto;
 import com.turkcell.rentacar.business.requests.create.CreateRentRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteRentRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateRentRequest;
-import com.turkcell.rentacar.core.exceptions.BusinessException;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
-import com.turkcell.rentacar.core.results.SuccessResult;
-import com.turkcell.rentacar.entities.concretes.Rent;
-import org.hibernate.sql.Delete;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 @RestController
 @RequestMapping("/api/rents")

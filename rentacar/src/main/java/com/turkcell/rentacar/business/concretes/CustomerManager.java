@@ -1,12 +1,11 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.CustomerService;
-import com.turkcell.rentacar.business.dtos.getDto.GetCustomerDto;
 import com.turkcell.rentacar.business.dtos.listDto.CustomerListDto;
-import com.turkcell.rentacar.core.exceptions.BusinessException;
-import com.turkcell.rentacar.core.mapping.ModelMapperService;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.SuccessDataResult;
+import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
+import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentacar.dataAccess.abstracts.CustomerDao;
 import com.turkcell.rentacar.entities.concretes.Customer;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,8 +5,8 @@ import com.turkcell.rentacar.business.dtos.listDto.IndividualCustomerListDto;
 import com.turkcell.rentacar.business.requests.create.CreateIndividualCustomerRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteIndividualCustomerRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateIndividualCustomerRequest;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

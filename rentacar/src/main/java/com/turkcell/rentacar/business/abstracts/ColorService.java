@@ -5,8 +5,8 @@ import com.turkcell.rentacar.business.dtos.getDto.GetColorDto;
 import com.turkcell.rentacar.business.requests.create.CreateColorRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteColorRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateColorRequest;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 
 import java.util.List;
 

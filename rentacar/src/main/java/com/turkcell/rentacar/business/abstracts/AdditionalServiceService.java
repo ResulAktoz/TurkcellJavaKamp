@@ -5,9 +5,9 @@ import com.turkcell.rentacar.business.dtos.listDto.AdditionalServiceListDto;
 import com.turkcell.rentacar.business.requests.create.CreateAdditionalServiceRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteAdditionalServiceRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateAdditionalServiceRequest;
-import com.turkcell.rentacar.core.exceptions.BusinessException;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
+import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 
 
 import java.util.List;

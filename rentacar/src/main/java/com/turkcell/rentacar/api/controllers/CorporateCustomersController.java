@@ -2,12 +2,11 @@ package com.turkcell.rentacar.api.controllers;
 
 import com.turkcell.rentacar.business.abstracts.CorporateCustomerService;
 import com.turkcell.rentacar.business.dtos.listDto.CorporateCustomerListDto;
-import com.turkcell.rentacar.business.requests.create.CreateCarDamageRequest;
 import com.turkcell.rentacar.business.requests.create.CreateCorporateCustomerRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteCorporateCustomerRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateCorporateCustomerRequest;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

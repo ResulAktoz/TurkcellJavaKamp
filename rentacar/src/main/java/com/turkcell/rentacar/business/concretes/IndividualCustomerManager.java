@@ -1,18 +1,17 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.IndividualCustomerService;
-import com.turkcell.rentacar.business.dtos.getDto.GetCorporateCustomerDto;
 import com.turkcell.rentacar.business.dtos.getDto.GetIndividualCustomerDto;
 import com.turkcell.rentacar.business.dtos.listDto.IndividualCustomerListDto;
 import com.turkcell.rentacar.business.requests.create.CreateIndividualCustomerRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteIndividualCustomerRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateIndividualCustomerRequest;
-import com.turkcell.rentacar.core.exceptions.BusinessException;
-import com.turkcell.rentacar.core.mapping.ModelMapperService;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
-import com.turkcell.rentacar.core.results.SuccessDataResult;
-import com.turkcell.rentacar.core.results.SuccessResult;
+import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
+import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
+import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;
+import com.turkcell.rentacar.core.utilities.results.SuccessResult;
 import com.turkcell.rentacar.dataAccess.abstracts.IndividualCustomerDao;
 import com.turkcell.rentacar.entities.concretes.IndividualCustomer;
 import org.springframework.beans.factory.annotation.Autowired;

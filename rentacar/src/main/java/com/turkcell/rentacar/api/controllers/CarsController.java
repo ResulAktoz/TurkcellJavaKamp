@@ -18,8 +18,8 @@ import com.turkcell.rentacar.business.dtos.getDto.GetCarDto;
 import com.turkcell.rentacar.business.requests.create.CreateCarRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteCarRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateCarRequest;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 
 import javax.validation.Valid;
 

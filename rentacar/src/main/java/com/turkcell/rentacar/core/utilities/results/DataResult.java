@@ -1,4 +1,4 @@
-package com.turkcell.rentacar.core.results;
+package com.turkcell.rentacar.core.utilities.results;
 
 public class DataResult<T> extends Result {
 	

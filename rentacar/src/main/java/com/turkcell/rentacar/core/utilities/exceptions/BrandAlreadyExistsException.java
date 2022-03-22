@@ -1,4 +1,4 @@
-package com.turkcell.rentacar.core.exceptions;
+package com.turkcell.rentacar.core.utilities.exceptions;
 
 public class BrandAlreadyExistsException extends BusinessException{
 	

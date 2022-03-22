@@ -5,10 +5,9 @@ import com.turkcell.rentacar.business.dtos.listDto.InvoiceListDto;
 import com.turkcell.rentacar.business.requests.create.CreateInvoiceRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteInvoiceRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateInvoiceRequest;
-import com.turkcell.rentacar.core.exceptions.BusinessException;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
-import com.turkcell.rentacar.entities.concretes.Invoice;
+import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 
 import java.time.LocalDate;
 import java.util.List;

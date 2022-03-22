@@ -30,4 +30,7 @@ public class OrderedAdditionalService {
     @JoinColumn(name = "rent_id")
     private Rent rent;
 
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
 }

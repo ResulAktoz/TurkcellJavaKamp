@@ -7,15 +7,14 @@ import com.turkcell.rentacar.business.dtos.listDto.OrderedAdditionalServiceListD
 import com.turkcell.rentacar.business.requests.create.CreateOrderedAdditionalServiceRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteOrderedAdditionalServiceRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateOrderedAdditionalServiceRequest;
-import com.turkcell.rentacar.core.exceptions.BusinessException;
-import com.turkcell.rentacar.core.mapping.ModelMapperService;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
-import com.turkcell.rentacar.core.results.SuccessDataResult;
-import com.turkcell.rentacar.core.results.SuccessResult;
+import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
+import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
+import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;
+import com.turkcell.rentacar.core.utilities.results.SuccessResult;
 import com.turkcell.rentacar.dataAccess.abstracts.OrderedAdditionalServiceDao;
 import com.turkcell.rentacar.entities.concretes.OrderedAdditionalService;
-import com.turkcell.rentacar.entities.concretes.Rent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -2,9 +2,7 @@ package com.turkcell.rentacar.api.controllers;
 
 import com.turkcell.rentacar.business.abstracts.CustomerService;
 import com.turkcell.rentacar.business.dtos.listDto.CustomerListDto;
-import com.turkcell.rentacar.business.requests.create.CreateCustomerRequest;
-import com.turkcell.rentacar.core.results.DataResult;
-import com.turkcell.rentacar.core.results.Result;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
