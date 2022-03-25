@@ -2,6 +2,7 @@ package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.OrderedAdditionalServiceService;
 import com.turkcell.rentacar.business.abstracts.RentService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.getDto.GetOrderedAdditionalServiceDto;
 import com.turkcell.rentacar.business.dtos.listDto.OrderedAdditionalServiceListDto;
 import com.turkcell.rentacar.business.requests.create.CreateOrderedAdditionalServiceRequest;
@@ -41,7 +42,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
                 .map(createOrderedAdditionalServiceRequest, OrderedAdditionalService.class);
         this.orderedAdditionalServiceDao.save(orderedAdditionalService);
 
-        return new SuccessResult("İstenilen ek hizmet başarıyla eklendi");
+        return new SuccessResult(BusinessMessages.ORDERED_ADDITIONAL_SERVICE_ADDED_SUCCESSFULLY);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
         OrderedAdditionalService orderedAdditionalService=this.modelMapperService.forRequest()
                 .map(updateOrderedAdditionalServiceRequest, OrderedAdditionalService.class);
         this.orderedAdditionalServiceDao.save(orderedAdditionalService);
-        return new SuccessResult("İStenilen ek ürün bilgisi güüncellendi.");
+        return new SuccessResult(BusinessMessages.ORDERED_ADDITIONAL_SERVICE_UPDATED_SUCCESSFULLY);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
         OrderedAdditionalService orderedAdditionalService = this.modelMapperService.forRequest()
                 .map(deleteOrderedAdditionalServiceRequest, OrderedAdditionalService.class);
         this.orderedAdditionalServiceDao.deleteById(deleteOrderedAdditionalServiceRequest.getOrderedAdditionalServiceId());
-        return new SuccessResult("istenilen ek hizmet bilgisi silindi.");
+        return new SuccessResult(BusinessMessages.ORDERED_ADDITIONAL_SERVICE_DELETED_SUCCESSFULLY);
     }
 
     @Override
@@ -71,18 +72,9 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
                 .map(orderedAdditionalService -> this.modelMapperService.forDto()
                         .map(orderedAdditionalService, OrderedAdditionalServiceListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<OrderedAdditionalServiceListDto>>(response,"İstenilen ek hizmetler listelendi.");
+        return new SuccessDataResult<List<OrderedAdditionalServiceListDto>>(response, BusinessMessages.ORDERED_ADDITIONAL_SERVICES_LISTED_SUCCESSFULLY);
     }
 
-    @Override
-    public DataResult<GetOrderedAdditionalServiceDto> getByOrderedAdditionalServiceId(Integer id) throws BusinessException {
-        checkIfOrderedAdditionalServiceIdExists(id);
-
-        OrderedAdditionalService orderedAdditionalService = this.orderedAdditionalServiceDao.getById(id);
-        GetOrderedAdditionalServiceDto response = this.modelMapperService.forDto().map(orderedAdditionalService, GetOrderedAdditionalServiceDto.class);
-        return new SuccessDataResult<GetOrderedAdditionalServiceDto>(response,"Başarıyla listelendi.");
-
-    }
 
     @Override
     public DataResult<List<OrderedAdditionalServiceListDto>> getByRentId(Integer id) {
@@ -92,7 +84,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
                 .map(orderedAdditionalService -> this.modelMapperService.forDto()
                         .map(orderedAdditionalService, OrderedAdditionalServiceListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<OrderedAdditionalServiceListDto>>(response, "Kiralama bilgisine göre ek hizmetler listelendi.");
+        return new SuccessDataResult<List<OrderedAdditionalServiceListDto>>(response, BusinessMessages.ORDERED_ADDITIONAL_SERVICE_FOR_RENT_LISTED_SUCCESSFULLY);
     }
 
     @Override
@@ -108,7 +100,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 
     private void checkIfOrderedAdditionalServiceIdExists(int id) throws BusinessException{
         if(!this.orderedAdditionalServiceDao.existsById(id)){
-            throw new BusinessException("Bu id'ye kayıtlı sipariş bulunamadi.");
+            throw new BusinessException(BusinessMessages.ORDERED_ADDITIONAL_SERVICE_NOT_FOUND);
         }
     }
 

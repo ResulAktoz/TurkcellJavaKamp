@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.CustomerService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.listDto.CustomerListDto;
 import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
@@ -33,13 +34,13 @@ public class CustomerManager implements CustomerService {
                 .map(customer -> modelMapperService.forDto()
                         .map(customer, CustomerListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<CustomerListDto>>(response, "Müşteriler başarıyla sıralandı.");
+        return new SuccessDataResult<List<CustomerListDto>>(response, BusinessMessages.CUSTOMERS_LISTED_SUCCESSFULLY);
     }
 
     @Override
     public void checkIfCustomerExists(int customerId) throws BusinessException {
         if(!this.customerDao.existsById(customerId)){
-            throw new BusinessException("Bu id'ye ait müşteri bulunamadı.");
+            throw new BusinessException(BusinessMessages.CUSTOMER_NOT_FOUND);
         }
     }
 

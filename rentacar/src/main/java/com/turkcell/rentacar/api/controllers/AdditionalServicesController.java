@@ -43,12 +43,7 @@ public class AdditionalServicesController {
         return this.additionalServiceService.delete(deleteAdditionalServiceRequest);
 
     }
-    @GetMapping("/getByAdditionalServiceId/{additionalServiceId}")
-    DataResult<GetAdditionalServiceDto> getByAdditionalServiceId(Integer id)throws BusinessException{
 
-        return this.additionalServiceService.getByAdditionalServiceId(id);
-
-    }
     @GetMapping("/getAll")
     DataResult<List<AdditionalServiceListDto>> getAll() throws BusinessException{
         return this.additionalServiceService.getAll();

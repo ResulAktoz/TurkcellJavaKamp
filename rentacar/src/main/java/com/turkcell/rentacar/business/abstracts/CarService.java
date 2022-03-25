@@ -17,11 +17,10 @@ public interface CarService {
     DataResult<GetCarDto> getByCarId(int id);
     Result delete(DeleteCarRequest deleteCarRequest);
     Result update(UpdateCarRequest updateCarRequest);
-    Result existByCarId(int id);
     Result updateKilometerInfo(UpdateCarKilometerInfoRequest updateCarKilometerInfoRequest);
 
     DataResult<List<CarListDto>> getAllPaged(int pageNumber, int pageSize);
-    DataResult<List<CarListDto>> getAllSorted(String param);
+    DataResult<List<CarListDto>> getAllSorted(boolean sort);
     DataResult<List<CarListDto>> findByDailyPriceLessThan(double requestedPrice);
     DataResult<List<CarListDto>> findByDailyPriceBetween(double since, double until);
     

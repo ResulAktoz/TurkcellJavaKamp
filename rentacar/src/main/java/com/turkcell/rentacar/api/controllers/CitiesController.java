@@ -41,9 +41,6 @@ public class CitiesController {
     DataResult<List<CityListDto>> getAll() throws BusinessException{
         return this.cityService.getAll();
     }
-    @GetMapping("/getById/{cityId}")
-    DataResult<GetCityDto> getById(@RequestParam("cityId") Integer id) throws BusinessException{
-        return this.cityService.getById(id);
-    }
+
 
 }

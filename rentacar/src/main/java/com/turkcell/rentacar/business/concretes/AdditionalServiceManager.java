@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.AdditionalServiceService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.getDto.GetAdditionalServiceDto;
 import com.turkcell.rentacar.business.dtos.listDto.AdditionalServiceListDto;
 import com.turkcell.rentacar.business.requests.create.CreateAdditionalServiceRequest;
@@ -38,7 +39,7 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 
         AdditionalService additionalService = this.modelMapperService.forRequest().map(createAdditionalServiceRequest, AdditionalService.class);
         this.additionalServiceDao.save(additionalService);
-        return new SuccessResult("Ek hizmet eklendi");
+        return new SuccessResult(BusinessMessages.ADDITIONAL_SERVICE_ADDED_SUCCESSFULLY);
     }
 
     @Override
@@ -47,24 +48,16 @@ public class AdditionalServiceManager implements AdditionalServiceService {
         AdditionalService additionalService = this.modelMapperService.forRequest()
                 .map(updateAdditionalServiceRequest, AdditionalService.class);
         this.additionalServiceDao.save(additionalService);
-        return new SuccessResult("Ek urun güncellendi");
+        return new SuccessResult(BusinessMessages.ADDITIONAL_SERVICE_UPDATED_SUCCESSFULLY);
     }
 
     @Override
     public Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws BusinessException {
         checkIfAdditionalServiceIdExists(deleteAdditionalServiceRequest.getAdditionalServiceId());
         this.additionalServiceDao.deleteById(deleteAdditionalServiceRequest.getAdditionalServiceId());
-        return new SuccessResult("Ek ürün başarıyla kaldırıldı.");
+        return new SuccessResult(BusinessMessages.ADDITIONAL_SERVICE_DELETED_SUCCESSFULLY);
     }
 
-    @Override
-    public DataResult<GetAdditionalServiceDto> getByAdditionalServiceId(Integer id) throws BusinessException {
-        checkIfAdditionalServiceIdExists(id);
-        AdditionalService additionalService= additionalServiceDao.getById(id);
-        GetAdditionalServiceDto response = this.modelMapperService.forDto().
-                map(additionalService, GetAdditionalServiceDto.class);
-        return new SuccessDataResult<GetAdditionalServiceDto> (response,"Ürün bilgisi başarıyla getirildi.");
-    }
 
     @Override
     public DataResult<List<AdditionalServiceListDto>> getAll() throws BusinessException {
@@ -74,19 +67,20 @@ public class AdditionalServiceManager implements AdditionalServiceService {
                 .map(additionalService -> this.modelMapperService.forDto()
                         .map(additionalService,AdditionalServiceListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<AdditionalServiceListDto>>(response,"Ürün bilgileri başarıyla sıralandı");
+        return new SuccessDataResult<List<AdditionalServiceListDto>>(response,BusinessMessages.ADDITIONAL_SERVICE_LISTED_SUCCESSFULLY);
     }
+
 
     private void checkIfAdditionalServiceNameExists(String additionalServiceName) throws BusinessException{
 
         if(this.additionalServiceDao.existsByAdditionalServiceName(additionalServiceName)){
-            throw new BusinessException("Bu isimde ek hizmet mevcut.");
+            throw new BusinessException(BusinessMessages.ADDITIONAL_SERVICE_ALREADY_EXISTS);
         }
     }
 
-    private void checkIfAdditionalServiceIdExists(Integer id) throws BusinessException{
-        if(!this.additionalServiceDao.existsById(id)){
-            throw new BusinessException("Bu id'ye ait ek hizmet yok.");
+    private void checkIfAdditionalServiceIdExists(int additionalServiceId) throws BusinessException{
+        if(!this.additionalServiceDao.existsById(additionalServiceId)){
+            throw new BusinessException(BusinessMessages.ADDITIONAL_SERVICE_NOT_FOUND);
 
         }
     }

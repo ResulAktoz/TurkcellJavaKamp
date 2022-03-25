@@ -14,11 +14,10 @@ import java.util.List;
 
 public interface AdditionalServiceService {
 
-    Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException;
-    Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException;
-    Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws  BusinessException;
+    Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest);
+    Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest);
+    Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest);
 
-    DataResult<GetAdditionalServiceDto> getByAdditionalServiceId(Integer id)throws BusinessException;
-    DataResult<List<AdditionalServiceListDto>> getAll() throws BusinessException;
+    DataResult<List<AdditionalServiceListDto>> getAll() ;
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public interface ColorService {
     DataResult<List<ColorListDto>> getAll();
     Result add(CreateColorRequest createColorRequest);
-    DataResult<GetColorDto> getById(Integer id);
+    DataResult<GetColorDto> getById(int id);
     Result update(UpdateColorRequest updateColorRequest);
     Result delete(DeleteColorRequest deleteColorRequest);
 }

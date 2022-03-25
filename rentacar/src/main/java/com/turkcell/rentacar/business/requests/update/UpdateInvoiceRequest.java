@@ -18,10 +18,12 @@ public class UpdateInvoiceRequest {
     private int invoiceId;
 
     @NotNull
-    @Size(min = 2)
-    private String invoiceNumber;
+    @Min(1)
+    private int userId;
 
     @NotNull
     @Min(1)
     private int rentId;
+
+
 }

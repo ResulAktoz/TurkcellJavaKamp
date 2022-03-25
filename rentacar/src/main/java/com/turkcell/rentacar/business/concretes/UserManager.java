@@ -1,12 +1,16 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.UserService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.getDto.GetUserDto;
 import com.turkcell.rentacar.business.dtos.listDto.UserListDto;
+import com.turkcell.rentacar.business.requests.update.UpdateUserRequest;
 import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;
+import com.turkcell.rentacar.core.utilities.results.SuccessResult;
 import com.turkcell.rentacar.dataAccess.abstracts.UserDao;
 import com.turkcell.rentacar.entities.abstracts.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,27 +39,27 @@ public class UserManager implements UserService {
                 .map(user -> this.modelMapperService.forDto()
                         .map(user, UserListDto.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<UserListDto>>(response, "Kullanıcılar başarıyla listelendi.");
-
-
+        return new SuccessDataResult<List<UserListDto>>(response, BusinessMessages.USERS_LISTED_SUCCESSFULLY);
 
     }
 
     @Override
-    public DataResult<GetUserDto> getByUserId(int userId) throws BusinessException {
-        checkIfUserExist(userId);
+    public Result update(UpdateUserRequest updateUserRequest) {
+        checkIfUserExist(updateUserRequest.getUserId());
 
-        User user = this.userDao.getById(userId);
+        User user = this.modelMapperService.forRequest()
+                .map(updateUserRequest, User.class);
 
-        GetUserDto response = this.modelMapperService.forDto().map(user, GetUserDto.class);
+        this.userDao.save(user);
 
-        return new SuccessDataResult<GetUserDto>(response, "İd'ye göre listeleme başarılı.");
+        return new SuccessResult(BusinessMessages.USER_UPDATED_SUCCESSFULLY);
 
     }
 
+
     private void checkIfUserExist(int userId){
        if(!this.userDao.existsById(userId)){
-           throw new BusinessException("Bu id'de kullanıcı bulunamadı");
+           throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
        }
     }
 }

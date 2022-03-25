@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.IndividualCustomerService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.getDto.GetIndividualCustomerDto;
 import com.turkcell.rentacar.business.dtos.listDto.IndividualCustomerListDto;
 import com.turkcell.rentacar.business.requests.create.CreateIndividualCustomerRequest;
@@ -33,52 +34,43 @@ public class IndividualCustomerManager implements IndividualCustomerService {
     }
 
     @Override
-    public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) throws BusinessException {
+    public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest){
         IndividualCustomer individualCustomer = this.modelMapperService.forRequest()
                 .map(createIndividualCustomerRequest, IndividualCustomer.class);
 
         this.individualCustomerDao.save(individualCustomer);
-        return new SuccessResult("Bireysel müşteri başarıyla eklendi.");
+        return new SuccessResult(BusinessMessages.INDIVIDUAL_CUSTOMER_ADDED_SUCCESSFULLY);
 
     }
 
     @Override
-    public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) throws BusinessException {
+    public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) {
         checkIfIndividualCustomerExistsById(updateIndividualCustomerRequest.getUserId());
         IndividualCustomer individualCustomer = this.modelMapperService.forRequest()
                 .map(updateIndividualCustomerRequest, IndividualCustomer.class);
-        return new SuccessResult("Bireysel müşteri başarıyla güncellendi.");
+        return new SuccessResult(BusinessMessages.INDIVIDUAL_CUSTOMER_UPDATED_SUCCESSFULLY);
     }
 
     @Override
-    public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) throws BusinessException {
+    public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) {
         checkIfIndividualCustomerExistsById(deleteIndividualCustomerRequest.getUserId());
         this.individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getUserId());
-        return new SuccessResult("Bireysel müşteri başarıyla kaldırıldı.");
+        return new SuccessResult(BusinessMessages.INDIVIDUAL_CUSTOMER_DELETED_SUCCESSFULLY);
     }
 
     @Override
-    public DataResult<List<IndividualCustomerListDto>> getAll() throws BusinessException {
+    public DataResult<List<IndividualCustomerListDto>> getAll(){
         List<IndividualCustomer> result = this.individualCustomerDao.findAll();
         List<IndividualCustomerListDto> response = result.stream()
                 .map(individualCustomer -> this.modelMapperService.forDto()
                         .map(individualCustomer, IndividualCustomerListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<IndividualCustomerListDto>>(response, "Bireysel müşteriler başarıyla listelendi.");
-    }
-
-    @Override
-    public DataResult<GetIndividualCustomerDto> getByUserId(int userId) throws BusinessException {
-        checkIfIndividualCustomerExistsById(userId);
-        IndividualCustomer individualCustomer = this.individualCustomerDao.getById(userId);
-        GetIndividualCustomerDto response = this.modelMapperService.forDto().map(individualCustomer, GetIndividualCustomerDto.class);
-        return new SuccessDataResult<GetIndividualCustomerDto>(response, "Bireysel müşteriler kullanıcı id'lerine göre listelendi.");
-
+        return new SuccessDataResult<List<IndividualCustomerListDto>>(response, BusinessMessages.INDIVIDUAL_CUSTOMER_LISTED_SUCCESSFULLY);
     }
 
     private void checkIfIndividualCustomerExistsById(int userId){
         if(!this.individualCustomerDao.existsById(userId)){
-            throw new BusinessException("Bu id'ye ait bireysel müşteri bulunamadı.");
+            throw new BusinessException(BusinessMessages.INDIVIDUAL_CUSTOMER_NOT_FOUND);
         }
     }
 }

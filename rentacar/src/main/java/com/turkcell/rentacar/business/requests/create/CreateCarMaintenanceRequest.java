@@ -15,7 +15,9 @@ public class CreateCarMaintenanceRequest {
 
     @NotNull
     private String description;
+
     private Date returnDate;
+
     @NotNull
     private int carId;
 

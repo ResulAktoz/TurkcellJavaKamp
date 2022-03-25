@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.PaymentService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.requests.create.CreatePaymentRequest;
 import com.turkcell.rentacar.business.requests.delete.DeletePaymentRequest;
 import com.turkcell.rentacar.business.requests.update.UpdatePaymentRequest;
@@ -32,37 +33,40 @@ public class PaymentManager implements PaymentService {
 
     @Override
     public Result add(CreatePaymentRequest createPaymentRequest) {
-        Payment payment = this.modelMapperService.forRequest().map(createPaymentRequest, Payment.class);
+        Payment payment = this.modelMapperService.forRequest()
+                .map(createPaymentRequest, Payment.class);
+
+        checkIFPaymentIsSuccess(payment);
 
         this.paymentDao.save(payment);
-        return new SuccessResult("Ödeme yöntremi eklendi.");
+
+        return new SuccessResult(BusinessMessages.PAYMENT_ADDED_SUCCESSFULLY);
 
     }
 
     @Override
     public Result update(UpdatePaymentRequest updatePaymentRequest) {
-        checkIFPaymentExists(updatePaymentRequest.getPaymentId());
 
         Payment payment = this.modelMapperService.forRequest().map(updatePaymentRequest, Payment.class);
         this.paymentDao.save(payment);
 
-        return new SuccessResult("Güncelleme başarılı.");
+        return new SuccessResult(BusinessMessages.PAYMENT_UPDATED_SUCCESSFULLY);
     }
 
     @Override
     public Result delete(DeletePaymentRequest deletePaymentRequest) {
-        checkIFPaymentExists(deletePaymentRequest.getPaymentId());
-        this.paymentDao.deleteById(deletePaymentRequest.getPaymentId());
+        Payment payment = this.modelMapperService.forRequest()
+                .map(deletePaymentRequest, Payment.class);
+        this.paymentDao.delete(payment);
 
-        return new SuccessResult("Ödeme yöntemi başarıyla kaldırıldı");
+        return new SuccessResult(BusinessMessages.PAYMENT_DELETED_SUCCESSFULLY);
     }
 
-    // private void checkPaymentBankType(int bankId){
-    //}
 
-    private void checkIFPaymentExists(int paymentId){
-        if(!this.paymentDao.existsById(paymentId)){
-            throw new BusinessException("Bu id'ye kayıtlı ödeme yöntemi bulunamadı.");
+
+    private void checkIFPaymentIsSuccess(Payment payment){
+        if(!this.baseBankPaymentServiceAdapter.payment(payment)){
+            throw new BusinessException(BusinessMessages.PAYMENT_FAILED);
         }
     }
 }

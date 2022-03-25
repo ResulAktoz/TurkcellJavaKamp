@@ -12,12 +12,10 @@ import java.util.List;
 public interface CarMaintenanceService {
     DataResult<List<CarMaintenanceListDto>> getAll();
     Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest);
-    DataResult<GetCarMaintenanceDto> getByCarMaintenanceId(Integer id);
     Result update(UpdateCarMaintenanceRequest updateCarMaintenanceRequest);
     Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest);
-    DataResult<List<CarMaintenanceListDto>> getListedCars();
     DataResult<List<CarMaintenanceListDto>> getByCarId(int id);
-    boolean checkIfCarMaintenanceIdExist(int id);
+    Result checkIfCarMaintenanceIdExist(int id);
 
 
 

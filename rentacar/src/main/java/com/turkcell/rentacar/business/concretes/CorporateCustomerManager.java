@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.CorporateCustomerService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.getDto.GetCorporateCustomerDto;
 import com.turkcell.rentacar.business.dtos.listDto.CorporateCustomerListDto;
 import com.turkcell.rentacar.business.requests.create.CreateCorporateCustomerRequest;
@@ -38,17 +39,18 @@ public class CorporateCustomerManager implements CorporateCustomerService {
                 .map(createCorporateCustomerRequest, CorporateCustomer.class);
 
         this.corporateCustomerDao.save(corporateCustomer);
-        return new SuccessResult("Başarıyla eklendi");
+        return new SuccessResult(BusinessMessages.CORPORATE_CUSTOMER_ADDED_SUCCESSFULLY);
     }
 
     @Override
     public Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) throws BusinessException {
         checkIfCorporateCustomerExistById(updateCorporateCustomerRequest.getUserId());
 
-        CorporateCustomer corporateCustomer = this.modelMapperService.forRequest().map(updateCorporateCustomerRequest, CorporateCustomer.class);
+        CorporateCustomer corporateCustomer = this.modelMapperService.forRequest()
+                .map(updateCorporateCustomerRequest, CorporateCustomer.class);
         this.corporateCustomerDao.save(corporateCustomer);
 
-        return new SuccessResult("Kurumsal müşteri başarıyla güncellendi.");
+        return new SuccessResult(BusinessMessages.CORPORATE_CUSTOMER_UPDATED_SUCCESSFULLY);
 
     }
 
@@ -58,7 +60,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
         this.corporateCustomerDao.deleteById(deleteCorporateCustomerRequest.getUserId());
 
-        return new SuccessResult("Kurumsal müşteri başarıyla silindi.");
+        return new SuccessResult(BusinessMessages.CORPORATE_CUSTOMER_DELETED_SUCCESSFULLY);
     }
 
     @Override
@@ -70,24 +72,15 @@ public class CorporateCustomerManager implements CorporateCustomerService {
                         .map(corporateCustomer, CorporateCustomerListDto.class))
                 .collect(Collectors.toList());
 
-        return new SuccessDataResult<List<CorporateCustomerListDto>>(response, "Veriler başarıyla yüklendi.");
+        return new SuccessDataResult<List<CorporateCustomerListDto>>(response,BusinessMessages.CORPORATE_CUSTOMER_LISTED_SUCCESSFULLY);
     }
 
-    @Override
-    public DataResult<GetCorporateCustomerDto> getByUserId(int userId) throws BusinessException {
-        checkIfCorporateCustomerExistById(userId);
 
-        CorporateCustomer corporateCustomer=this.corporateCustomerDao.getById(userId);
-
-        GetCorporateCustomerDto response = this.modelMapperService.forDto().map(corporateCustomer, GetCorporateCustomerDto.class);
-
-        return new SuccessDataResult<GetCorporateCustomerDto>(response, "Veriler kullanıcı id'sine göre listelendi.");
-    }
 
     private void checkIfCorporateCustomerExistById(int userId) throws BusinessException{
 
        if(!this.corporateCustomerDao.existsById(userId)){
-           throw new BusinessException("Bu id'de kayıtlı kurumsal müşteri bulunamadı");
+           throw new BusinessException(BusinessMessages.CORPORATE_CUSTOMER_NOT_FOUND);
        }
 
     }

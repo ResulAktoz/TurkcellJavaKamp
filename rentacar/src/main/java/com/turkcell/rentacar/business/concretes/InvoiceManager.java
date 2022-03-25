@@ -3,6 +3,7 @@ package com.turkcell.rentacar.business.concretes;
 import com.turkcell.rentacar.business.abstracts.InvoiceService;
 import com.turkcell.rentacar.business.abstracts.OrderedAdditionalServiceService;
 import com.turkcell.rentacar.business.abstracts.RentService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.getDto.GetInvoiceDto;
 import com.turkcell.rentacar.business.dtos.listDto.InvoiceListDto;
 import com.turkcell.rentacar.business.requests.create.CreateInvoiceRequest;
@@ -42,8 +43,7 @@ public class InvoiceManager implements InvoiceService {
 
 
     @Override
-    public Result add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException {
-        //checkIfRentIdAlreadyExists(createInvoiceRequest.getRentId());
+    public Result add(CreateInvoiceRequest createInvoiceRequest) {
         Invoice invoice = this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 
         if(CalculateDelayedDaysPrice(createInvoiceRequest.getRentId()).isSuccess()) {
@@ -55,32 +55,33 @@ public class InvoiceManager implements InvoiceService {
         }
             this.invoiceDao.save(invoice);
 
-            return new SuccessResult("Fatura başarıyla eklendi.");
+            return new SuccessResult(BusinessMessages.INVOICE_ADDED_SUCCESSFULLY);
 
     }
 
     @Override
-    public Result update(UpdateInvoiceRequest updateInvoiceRequest) throws BusinessException {
+    public Result update(UpdateInvoiceRequest updateInvoiceRequest) {
         checkIfInvoiceExists(updateInvoiceRequest.getInvoiceId());
         Invoice invoice = this.modelMapperService.forRequest().map(updateInvoiceRequest, Invoice.class);
 
         invoice.setTotalPrice(calculateAndSetTotalPrice(updateInvoiceRequest.getRentId()));
         this.invoiceDao.save(invoice);
 
-        return new SuccessResult("Fatura başarıyla güncellendi.");
+        return new SuccessResult(BusinessMessages.INVOICE_UPDATED_SUCCESSFULLY);
 
     }
 
     @Override
-    public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) throws BusinessException {
-        checkIfInvoiceExists(deleteInvoiceRequest.getInvoiceId());
-        this.invoiceDao.deleteById(deleteInvoiceRequest.getInvoiceId());
+    public Result delete(DeleteInvoiceRequest deleteInvoiceRequest)  {
 
-        return new SuccessResult("Fatura başarıyla kaldırıldı.");
+        Invoice invoice = this.modelMapperService.forRequest().map(deleteInvoiceRequest, Invoice.class);
+
+        this.invoiceDao.delete(invoice);
+        return new SuccessResult(BusinessMessages.INVOICE_DELETED_SUCCESSFULLY);
     }
 
     @Override
-    public DataResult<List<InvoiceListDto>> getAll() throws BusinessException {
+    public DataResult<List<InvoiceListDto>> getAll(){
         List<Invoice> result = this.invoiceDao.findAll();
 
         List<InvoiceListDto> response = result.stream()
@@ -88,20 +89,12 @@ public class InvoiceManager implements InvoiceService {
                         .map(invoice, InvoiceListDto.class))
                 .collect(Collectors.toList());
 
-        return new SuccessDataResult<List<InvoiceListDto>>(response, "Faturlara başarıyla listelendi.");
+        return new SuccessDataResult<List<InvoiceListDto>>(response, BusinessMessages.INVOICE_LISTED_SUCCESSFULLY);
     }
 
-    @Override
-    public DataResult<GetInvoiceDto> getByInvoiceId(int invoiceId) throws BusinessException {
-        checkIfInvoiceExists(invoiceId);
-        Invoice invoice =this.invoiceDao.getById(invoiceId);
-
-        GetInvoiceDto response = this.modelMapperService.forDto().map(invoice, GetInvoiceDto.class);
-        return new SuccessDataResult<GetInvoiceDto>(response, "Faturalar listelendi.");
-    }
 
     @Override
-    public DataResult<List<InvoiceListDto>> getByUserId(int userId) throws BusinessException {
+    public DataResult<List<InvoiceListDto>> getByUserId(int userId)  {
         checkIfUserExists(userId);
 
         List<Invoice> result = this.invoiceDao.getByUser_UserId(userId);
@@ -111,7 +104,7 @@ public class InvoiceManager implements InvoiceService {
                         .map(invoice, InvoiceListDto.class))
                 .collect(Collectors.toList());
 
-        return new SuccessDataResult<List<InvoiceListDto>>(response, "Kullanıcı faturaları listelendi.");
+        return new SuccessDataResult<List<InvoiceListDto>>(response, BusinessMessages.USERS_INVOICES_LISTED_SUCCESSFULLY);
     }
 
     @Override
@@ -123,7 +116,7 @@ public class InvoiceManager implements InvoiceService {
                         .map(invoice, InvoiceListDto.class))
                 .collect(Collectors.toList());
 
-        return new SuccessDataResult<List<InvoiceListDto>>(response, "Tarih aralığındaki faturalar listelendi.");
+        return new SuccessDataResult<List<InvoiceListDto>>(response, BusinessMessages.INVOICE_BETWEEN_START_DATE_AND_END_DATE_LISTED_SUCCESSFULLY);
 
 
     }
@@ -141,31 +134,41 @@ public class InvoiceManager implements InvoiceService {
 
 
 
-    private void checkIfRentIdAlreadyExists(int rentId) throws BusinessException{
-        if(this.invoiceDao.existsByRent_RentId(rentId)){
-            throw new BusinessException("Bu id'ye ait bir kiralama faturası mevcut.");
+    private void checkIfRentExists(int rentId) throws BusinessException{
+        if(!this.invoiceDao.existsByRent_RentId(rentId)){
+            throw new BusinessException(BusinessMessages.INVOICE_NOT_FOUND);
         }
     }
 
+    private double calculateIfCityIsDifferentPrice(int rentId){
+        if(this.rentService.checkIfReturnCityIsDifferentFromRentedCity(rentId).isSuccess()){
+            return 750;
+        }
+        return 0;
+    }
+
     private double calculateAndSetTotalPrice(int rentId){
-        double rentPrice = this.rentService.calculateRentPrice(rentId);
+        double rentPrice = this.rentService.calculateRentPrice(rentId).getData();
 
         double orderedServicePrice = this.orderedAdditionalServiceService.calculateOrderedServicePrice(rentId);
 
+        double differentCityPrice = calculateIfCityIsDifferentPrice(rentId);
 
-        return rentPrice + orderedServicePrice;
+        return rentPrice + orderedServicePrice+ differentCityPrice;
 
     }
 
+
+
     private void checkIfInvoiceExists(int invoiceId){
         if(!this.invoiceDao.existsById(invoiceId)){
-            throw new BusinessException("Bu id'ye ait fatura bulunamadı");
+            throw new BusinessException(BusinessMessages.INVOICE_NOT_FOUND);
         }
     }
 
     private void checkIfUserExists(int userId){
         if(!this.invoiceDao.findByUser_UserId(userId)){
-            throw new BusinessException("Kullanıcı bulunamadı.");
+            throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
         }
     }
 

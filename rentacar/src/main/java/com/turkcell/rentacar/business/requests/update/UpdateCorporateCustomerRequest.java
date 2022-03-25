@@ -19,6 +19,14 @@ public class UpdateCorporateCustomerRequest {
     private int userId;
 
     @NotNull
+    @Size(min = 2)
+    private String companyName;
+
+    @NotNull
+    @Size(min = 2)
+    private String taxNumber;
+
+    @NotNull
     @Email
     private String email;
 
@@ -26,11 +34,5 @@ public class UpdateCorporateCustomerRequest {
     @Size(min = 2)
     private String password;
 
-    @NotNull
-    @Size(min = 2)
-    private String companyName;
 
-    @NotNull
-    @Size(min = 2)
-    private String taxNumber;
 }

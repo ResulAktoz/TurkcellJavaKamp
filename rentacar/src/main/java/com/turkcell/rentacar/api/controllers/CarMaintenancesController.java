@@ -52,10 +52,4 @@ public class CarMaintenancesController {
 
     }
 
-    @GetMapping("/getalllistedCar")
-    public DataResult<List<CarMaintenanceListDto>> getAllActiveCars() {
-        return this.carMaintenanceService.getListedCars();
-
-
-    }
 }

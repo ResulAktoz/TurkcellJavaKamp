@@ -13,7 +13,7 @@ import java.util.List;
 public interface BrandService {
     DataResult<List<BrandListDto>> getAll();
     Result add(CreateBrandRequest createBrandRequest);
-    DataResult<GetBrandDto> getById(Integer id);
+    DataResult<GetBrandDto> getById(int id);
     Result update(UpdateBrandRequest updateBrandRequest);
     Result delete(DeleteBrandRequest deleteBrandRequest);
     

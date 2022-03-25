@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface CustomerService {
 
-    DataResult<List<CustomerListDto>> getAll() throws BusinessException;
-    void checkIfCustomerExists(int customerId) throws BusinessException;
+    DataResult<List<CustomerListDto>> getAll() ;
+    void checkIfCustomerExists(int customerId) ;
 }

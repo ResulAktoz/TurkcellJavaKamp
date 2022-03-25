@@ -13,10 +13,9 @@ import java.util.List;
 
 public interface CityService {
 
-    Result add(CreateCityRequest createCityRequest) throws BusinessException;
-    Result update(UpdateCityRequest updateCityRequest) throws BusinessException;
-    Result delete(DeleteCityRequest deleteCityRequest) throws BusinessException;
+    Result add(CreateCityRequest createCityRequest);
+    Result update(UpdateCityRequest updateCityRequest);
+    Result delete(DeleteCityRequest deleteCityRequest);
 
-    DataResult<List<CityListDto>> getAll() throws BusinessException;
-    DataResult<GetCityDto> getById(Integer id) throws BusinessException;
+    DataResult<List<CityListDto>> getAll();
 }

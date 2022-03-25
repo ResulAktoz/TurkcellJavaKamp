@@ -14,6 +14,14 @@ import javax.validation.constraints.Size;
 public class CreateCorporateCustomerRequest {
 
     @NotNull
+    @Size(min = 2)
+    private String companyName;
+
+    @NotNull
+    @Size(min = 2)
+    private String taxNumber;
+
+    @NotNull
     @Email
     private String email;
 
@@ -21,11 +29,5 @@ public class CreateCorporateCustomerRequest {
     @Size(min = 2)
     private String password;
 
-    @NotNull
-    @Size(min = 2)
-    private String companyName;
 
-    @NotNull
-    @Size(min = 2)
-    private String taxNumber;
 }

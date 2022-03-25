@@ -13,13 +13,11 @@ import java.util.List;
 
 public interface OrderedAdditionalServiceService {
 
-    Result add(CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest) throws BusinessException;
-    Result update(UpdateOrderedAdditionalServiceRequest updateOrderedAdditionalServiceRequest) throws BusinessException;
-    Result delete(DeleteOrderedAdditionalServiceRequest deleteOrderedAdditionalServiceRequest) throws BusinessException;
+    Result add(CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest);
+    Result update(UpdateOrderedAdditionalServiceRequest updateOrderedAdditionalServiceRequest);
+    Result delete(DeleteOrderedAdditionalServiceRequest deleteOrderedAdditionalServiceRequest);
 
-    DataResult<List<OrderedAdditionalServiceListDto>> getAll() throws BusinessException;
-    DataResult<GetOrderedAdditionalServiceDto> getByOrderedAdditionalServiceId(Integer id) throws BusinessException;
+    DataResult<List<OrderedAdditionalServiceListDto>> getAll();
     DataResult<List<OrderedAdditionalServiceListDto>> getByRentId(Integer id);
-
     double calculateOrderedServicePrice(int rentId);
 }

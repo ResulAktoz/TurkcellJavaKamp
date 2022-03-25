@@ -3,6 +3,7 @@ package com.turkcell.rentacar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.requests.update.UpdateCarKilometerInfoRequest;
 import com.turkcell.rentacar.core.utilities.exceptions.CarNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ import com.turkcell.rentacar.dataAccess.abstracts.CarDao;
 import com.turkcell.rentacar.dataAccess.abstracts.ColorDao;
 import com.turkcell.rentacar.entities.concretes.Car;
 
+import javax.persistence.EntityNotFoundException;
+
 
 @Service
 public class CarManager implements CarService{
@@ -53,7 +56,7 @@ public class CarManager implements CarService{
                         .forDto()
                         .map(car,CarListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<CarListDto>>(response,"Veriler listelendi");		
+        return new SuccessDataResult<List<CarListDto>>(response, BusinessMessages.CARS_LISTED_SUCCESSFULLY);
 	}
 
 	@Override
@@ -61,60 +64,47 @@ public class CarManager implements CarService{
 		
 			Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 			this.carDao.save(car);
-			return new SuccessResult("Araba eklendi");
+			return new SuccessResult(BusinessMessages.CAR_ADDED_SUCCESSFULLY);
 			
 	}
 
 	@Override
 	public DataResult<GetCarDto> getByCarId(int id) {
-		if(carDao.existsCarByCarId(id)) {
+
 		Car car = carDao.getById(id); //Optional<Car> car = carDao.findById(id);
-        GetCarDto response = modelMapperService.forDto().map(car,GetCarDto.class);
-        return new SuccessDataResult<GetCarDto>(response,"Id'ye göre listelendi");
-		}else {
-			return new ErrorDataResult<GetCarDto>("Bu Id'de araç bulunamadı");
-		}
+        GetCarDto response = modelMapperService.forDto()
+				.map(car,GetCarDto.class);
+        return new SuccessDataResult<GetCarDto>(response, BusinessMessages.CAR_LISTED_SUCCESSFULLY);
+
+
 	}
 
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) {
-	
-			if (this.carDao.existsCarByCarId(deleteCarRequest.getId())) {
-					this.carDao.deleteById(deleteCarRequest.getId());
-					return new SuccessResult("Araba silindi.");
-			} else {
-			return new ErrorResult("Araba bulunamadı");
-		}		
+		checkIfCarExists(deleteCarRequest.getId());
+		this.carDao.deleteById(deleteCarRequest.getId());
+		return new SuccessResult(BusinessMessages.CAR_DELETED_SUCCESSFULLY);
+
 	}
 
 	@Override
 	public Result update(UpdateCarRequest updateCarRequest) {
-		if(carDao.existsCarByCarId(updateCarRequest.getId())) {
-		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
+		checkIfCarExists(updateCarRequest.getId());
+		Car car = this.modelMapperService.forRequest()
+				.map(updateCarRequest, Car.class);
 		
 
 		this.carDao.save(car);
-		return new SuccessResult("Araba güncellendi");
-		}else {
-			throw new CarNotFoundException("Araba bulunamadı");
-			//return new ErrorResult("Araba bulunamadı");
-			
-		}
+		return new SuccessResult(BusinessMessages.CAR_UPDATED_SUCCESSFULLY);
+
 	}
 
-	@Override
-	public Result existByCarId(int id) {
-		if(this.carDao.existsCarByCarId(id)){
-			return new SuccessResult("Araba bulundu.");
-		}
-		return new ErrorResult("Araba bulunamadı");
-	}
 
 	@Override
 	public Result updateKilometerInfo(UpdateCarKilometerInfoRequest updateCarKilometerInfoRequest) {
 		this.carDao.updateKilometerToCarByCarId(updateCarKilometerInfoRequest.getCarId(),
 				updateCarKilometerInfoRequest.getKilometerInfo());
-		return new SuccessResult("Kilometre bilgisi güncellendi.");
+		return new SuccessResult(BusinessMessages.KILOMETER_INFO_CAR_UPDATED_SUCCESSFULLY);
 
 	}
 
@@ -126,31 +116,23 @@ public class CarManager implements CarService{
 		List<CarListDto> response = result.stream()
 				.map(car -> this.modelMapperService.forDto().map(car, CarListDto.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<CarListDto>>(response);
+		return new SuccessDataResult<List<CarListDto>>(response, BusinessMessages.CAR_LISTED_AND_PAGINATED_SUCCESSFULLY);
 		
 	}
 
 
 
 	@Override
-	public DataResult<List<CarListDto>> getAllSorted(String param) {
+	public DataResult<List<CarListDto>> getAllSorted(boolean sort) {
 
-		Sort sort;
+		Sort sorted = Sort.by(checkSortDirectionType(sort), "dailyPrice");
 
-		if(param.toUpperCase().equals("ASC")) {
-			sort = Sort.by(Sort.Direction.ASC, "dailyPrice");
-		}else if(param.toUpperCase().equals("DESC")) {
-			sort = Sort.by(Sort.Direction.DESC, "dailyPrice");
-		}else {
-			return new ErrorDataResult<List<CarListDto>>("Düzgün parametre giriniz. ASC veya DESC");
-		}
-
-		List<Car> result = this.carDao.findAll(sort);
+		List<Car> result = this.carDao.findAll(sorted);
 
 		List<CarListDto> response = result.stream()
 				.map(car -> this.modelMapperService.forDto().map(car, CarListDto.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<CarListDto>>(response);
+		return new SuccessDataResult<List<CarListDto>>(response, BusinessMessages.CAR_SORTED_SUCCESSFULLY);
 	}
 
 
@@ -160,9 +142,10 @@ public class CarManager implements CarService{
 		List<Car> result = this.carDao.findByDailyPriceLessThan(requestedPrice);
 
 		List<CarListDto> response = result.stream()
-				.map(car -> this.modelMapperService.forDto().map(car, CarListDto.class))
+				.map(car -> this.modelMapperService.forDto()
+						.map(car, CarListDto.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<CarListDto>>(response);
+		return new SuccessDataResult<List<CarListDto>>(response, BusinessMessages.CAR_LISTED_SUCCESSFULLY_BY_DAILY_PRICE);
 		
 	}
 
@@ -176,7 +159,21 @@ public class CarManager implements CarService{
 				.map(car -> this.modelMapperService.forDto().map(car, CarListDto.class))
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<CarListDto>>(response);
-	}	
+	}
+
+	private void checkIfCarExists(int carId){
+		if(!this.carDao.existsCarByCarId(carId)){
+			throw new EntityNotFoundException(BusinessMessages.CAR_NOT_FOUND);
+		}
+	}
+
+	private Sort.Direction checkSortDirectionType(boolean sort){
+		if(sort){
+			return  Sort.Direction.ASC;
+		}else{
+			return Sort.Direction.DESC;
+		}
+	}
 	
 }
 

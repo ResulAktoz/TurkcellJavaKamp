@@ -14,13 +14,12 @@ import java.util.List;
 
 public interface InvoiceService {
 
-    Result add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException;
-    Result update(UpdateInvoiceRequest updateInvoiceRequest) throws BusinessException;
-    Result delete(DeleteInvoiceRequest deleteInvoiceRequest) throws BusinessException;
+    Result add(CreateInvoiceRequest createInvoiceRequest);
+    Result update(UpdateInvoiceRequest updateInvoiceRequest) ;
+    Result delete(DeleteInvoiceRequest deleteInvoiceRequest) ;
 
-    DataResult<List<InvoiceListDto>> getAll() throws BusinessException;
-    DataResult<GetInvoiceDto> getByInvoiceId(int invoiceId) throws BusinessException;
-    DataResult<List<InvoiceListDto>> getByUserId(int userId) throws BusinessException;
+    DataResult<List<InvoiceListDto>> getAll() ;
+    DataResult<List<InvoiceListDto>> getByUserId(int userId) ;
     DataResult<List<InvoiceListDto>> findByCreationDayBetween(LocalDate startDate, LocalDate endDate);
 
 }

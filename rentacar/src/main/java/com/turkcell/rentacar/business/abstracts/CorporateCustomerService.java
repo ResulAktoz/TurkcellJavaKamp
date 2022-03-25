@@ -13,10 +13,10 @@ import java.util.List;
 
 public interface CorporateCustomerService {
 
-    Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest) throws BusinessException;
-    Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) throws BusinessException;
-    Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) throws BusinessException;
+    Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest);
+    Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest);
+    Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest);
 
-    DataResult<List<CorporateCustomerListDto>> getAll() throws BusinessException;
-    DataResult<GetCorporateCustomerDto> getByUserId(int userId) throws BusinessException;
+    DataResult<List<CorporateCustomerListDto>> getAll();
+
 }

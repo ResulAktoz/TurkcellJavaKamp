@@ -17,10 +17,10 @@ public class RentListDto {
     private int rentId;
     private LocalDate rentStartDate;
     private LocalDate rentReturnDate;
-    private int rentCityId;
+    private int rentedCityId;
     private int returnCityId;
     private int carId;
     private int userId;
     private int invoiceId;
-    private List<GetOrderedAdditionalServiceDto> orderedAdditionalServices;
+
 }

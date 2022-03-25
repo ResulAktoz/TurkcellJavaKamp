@@ -43,10 +43,7 @@ public class OrderedAdditionalServiceController {
     DataResult<List<OrderedAdditionalServiceListDto>> getAll() throws BusinessException{
         return this.orderedAdditionalServiceService.getAll();
     }
-    @GetMapping("/getByOrderedAdditionalServiceId/{orderedAdditionalServiceId}")
-    DataResult<GetOrderedAdditionalServiceDto> getByOrderedAdditionalServiceId(@RequestParam("orderedAdditionalServiceId") Integer id) throws BusinessException{
-    return this.orderedAdditionalServiceService.getByOrderedAdditionalServiceId(id);
-    }
+
     @GetMapping("/getByRentId/{rentId}")
     DataResult<List<OrderedAdditionalServiceListDto>> getByRentId(@RequestParam("rentId")Integer id){
         return this.orderedAdditionalServiceService.getByRentId(id);

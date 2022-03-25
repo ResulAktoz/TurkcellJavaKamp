@@ -22,6 +22,9 @@ public class UpdateRentRequest {
     private LocalDate rentReturnDate;
 
     @NotNull
+    private String startedKilometerInfo;
+
+    @NotNull
     @Min(1)
     private int rentCityId;
 
@@ -29,16 +32,11 @@ public class UpdateRentRequest {
     @Min(1)
     private int returnCityId;
 
-    @NotNull
-    @Size(min = 2)
-    private String startedKilometerInfo;
 
     @NotNull
     @Min(1)
     private int carId;
 
-    @NotNull
-    @Min(1)
-    private int userId;
+
 
 }

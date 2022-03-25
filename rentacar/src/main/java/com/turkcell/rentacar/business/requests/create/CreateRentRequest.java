@@ -23,8 +23,11 @@ public class CreateRentRequest {
     private LocalDate rentReturnDate;
 
     @NotNull
+    private String startedKilometerInfo;
+
+    @NotNull
     @Min(1)
-    private int rentCityId;
+    private int rentedCityId;
 
     @NotNull
     @Min(1)

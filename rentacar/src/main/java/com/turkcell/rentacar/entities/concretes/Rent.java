@@ -29,6 +29,7 @@ public class Rent {
     @Column(name = "return_date")
     private LocalDate rentReturnDate;
 
+
     @ManyToOne
     @JoinColumn(name = "rented_city_id")
     private City rentedCity;

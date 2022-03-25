@@ -2,6 +2,7 @@ package com.turkcell.rentacar.api.controllers;
 
 import java.util.List;
 
+import com.turkcell.rentacar.business.requests.update.UpdateCarKilometerInfoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import com.turkcell.rentacar.business.requests.update.UpdateCarRequest;
 import com.turkcell.rentacar.core.utilities.results.DataResult;
 import com.turkcell.rentacar.core.utilities.results.Result;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 
@@ -35,7 +37,7 @@ public class CarsController {
 		super();
 		this.carService = carService;
 	}
-	@GetMapping("/getall")
+	@GetMapping("/getAll")
 	public DataResult<List<CarListDto>> getAll() {
 		return this.carService.getAll();
 				
@@ -48,7 +50,7 @@ public class CarsController {
 
 	}
 
-	@GetMapping("/getByCarId/{carId}")
+	@GetMapping("/getByCarId")
     public DataResult<GetCarDto> getByCarId(@PathVariable("carId") Integer carId) {
         return this.carService.getByCarId(carId);
 		
@@ -66,15 +68,21 @@ public class CarsController {
 		
 		
 	}
+	@Transactional
+	@PostMapping("/updateKilometerInfo")
+	public Result updateKilometerInfo(@RequestBody @Valid UpdateCarKilometerInfoRequest updateCarKilometerInfoRequest){
+		return this.carService.updateKilometerInfo(updateCarKilometerInfoRequest);
+	}
+
 	 @GetMapping("/getALlPaged/{pageNumber}/{pageSize}")
 	 DataResult<List<CarListDto>> getAllPaged(@PathVariable("pageNumber") int pageNumber, @PathVariable("pageSize") int pageSize){
 		 return this.carService.getAllPaged(pageNumber-1, pageSize);
 	 }
 	 
 	 @GetMapping("/getAllSorted/{orderOfSort}")
-	    DataResult<List<CarListDto>> getAllSorted (@RequestParam("orderOfSort") String param){
+	    DataResult<List<CarListDto>> getAllSorted (@RequestParam("orderOfSort") boolean sort){
 	    	
-	    	return this.carService.getAllSorted(param);
+	    	return this.carService.getAllSorted(sort);
 	    }
 	    
 	    @GetMapping("/findByDailyPriceLessThan/{requestedPrice}")

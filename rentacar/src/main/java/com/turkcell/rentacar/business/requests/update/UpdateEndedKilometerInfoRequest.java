@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateEndedKilometerInfo {
+public class UpdateEndedKilometerInfoRequest {
 
     @NotNull
     @Min(1)

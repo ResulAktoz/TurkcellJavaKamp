@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.BrandService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.getDto.GetBrandDto;
 import com.turkcell.rentacar.business.dtos.listDto.BrandListDto;
 import com.turkcell.rentacar.business.requests.create.CreateBrandRequest;
@@ -8,6 +9,7 @@ import com.turkcell.rentacar.business.requests.delete.DeleteBrandRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateBrandRequest;
 import com.turkcell.rentacar.core.utilities.exceptions.BrandAlreadyExistsException;
 import com.turkcell.rentacar.core.utilities.exceptions.BrandNotFoundException;
+import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentacar.core.utilities.results.DataResult;
 import com.turkcell.rentacar.core.utilities.results.Result;
@@ -17,7 +19,9 @@ import com.turkcell.rentacar.dataAccess.abstracts.BrandDao;
 import com.turkcell.rentacar.entities.concretes.Brand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,61 +46,53 @@ public class BrandManager implements BrandService {
                         .forDto()
                         .map(brand,BrandListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<BrandListDto>>(response,"Veri listelendi.");
+        return new SuccessDataResult<List<BrandListDto>>(response, BusinessMessages.BRANDS_LISTED_SUCCESSFULLY);
     }
 
     @Override
     public Result add(CreateBrandRequest createBrandRequest) {
-        if(this.brandDao.existsBrandByName(createBrandRequest.getName())) {
-            throw new BrandAlreadyExistsException("Bu id'ye sahip marka sisteme kayıtlı");
-            //return new ErrorResult("Kayıtlı marka");
-        }else {
-            //System.out.println(createBrandRequest.getName());
+
             Brand brand = this.modelMapperService
                     .forRequest().map(createBrandRequest,Brand.class);
-            //System.out.println(createBrandRequest.getName());
+
             this.brandDao.save(brand);
-            return new SuccessResult("Marka eklendi.");
-            
-        }
+            return new SuccessResult(BusinessMessages.BRAND_ADDED_SUCCESSFULLY);
+
     }
 
     @Override
-    public DataResult<GetBrandDto> getById(Integer id) {
-    	Optional<Brand> brand = brandDao.findById(id);
-        if(brand.isPresent()) {
-        GetBrandDto response = this.modelMapperService.forDto().map(brand.get(),GetBrandDto.class);
-        return new SuccessDataResult<GetBrandDto>(response,"Bu Id'de marka kayıtlı") ;
-        }else {
-        	throw new BrandNotFoundException("Bu id'de kayıtlı marka bulunamadı");
-        //return new ErrorDataResult<GetBrandDto>("Bu Id'de marka bulunamadı");
-        }
+    public DataResult<GetBrandDto> getById(int id) {
+
+        Brand brand = this.brandDao.getById(id);
+        GetBrandDto response = this.modelMapperService.forDto().map(brand, GetBrandDto.class);
+
+        return new SuccessDataResult<GetBrandDto>(response, BusinessMessages.BRAND_LISTED_SUCCESSFULLY);
     }
 
 	
 
 	@Override
 	public Result update(UpdateBrandRequest updateBrandRequest) {
-		if(this.brandDao.findById(updateBrandRequest.getId()).isPresent()) {
-			Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
-			brandDao.save(brand);
-            return new SuccessResult("Marka güncellendi.");
-		}else {
-			throw new BrandNotFoundException("Bu id'de kayıtlı Marka bulunamadı");
-		   // return new ErrorResult("Bu Id'de kayıtlı marka bulunamadı, güncelleme başarısız. ");
-        }
+        checkIfBrandExists(updateBrandRequest.getId());
+        Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
+        brandDao.save(brand);
+        return new SuccessResult(BusinessMessages.BRAND_UPDATED_SUCCESSFULLY);
+
 		
 	}
 
 	@Override
 	public Result delete(DeleteBrandRequest deleteBrandRequest) {
-		if(this.brandDao.findById(deleteBrandRequest.getId()).isPresent()) {
-			brandDao.deleteById(deleteBrandRequest.getId());
-            return new SuccessResult("Marka silindi.");
-		}else {
-			throw new BrandNotFoundException("Bu id'de kayıtlı marka bulunamadı");
-            //return new ErrorResult("Marka bulunamadı, silinme başarız");
-        }
+        checkIfBrandExists(deleteBrandRequest.getId());
+        this.brandDao.deleteById(deleteBrandRequest.getId());
+        return new SuccessResult(BusinessMessages.BRAND_DELETED_SUCCESSFULLY);
+
 		
 	}
+
+    private void checkIfBrandExists(int brandId){
+    if(this.brandDao.existsById(brandId)){
+        throw new BusinessException(BusinessMessages.BRAND_NOT_FOUND);
+        }
+    }
 }
