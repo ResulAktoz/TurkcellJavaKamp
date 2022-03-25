@@ -10,12 +10,10 @@ import com.turkcell.rentacar.business.requests.delete.DeleteInvoiceRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateInvoiceRequest;
 import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
-import com.turkcell.rentacar.core.utilities.results.DataResult;
-import com.turkcell.rentacar.core.utilities.results.Result;
-import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;
-import com.turkcell.rentacar.core.utilities.results.SuccessResult;
+import com.turkcell.rentacar.core.utilities.results.*;
 import com.turkcell.rentacar.dataAccess.abstracts.InvoiceDao;
 import com.turkcell.rentacar.entities.concretes.Invoice;
+import com.turkcell.rentacar.entities.concretes.Rent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -45,14 +43,20 @@ public class InvoiceManager implements InvoiceService {
 
     @Override
     public Result add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException {
-        checkIfRentIdAlreadyExists(createInvoiceRequest.getRentId());
+        //checkIfRentIdAlreadyExists(createInvoiceRequest.getRentId());
         Invoice invoice = this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 
-        calculateAndSetTotalPrice(createInvoiceRequest.getRentId(), invoice);
+        if(CalculateDelayedDaysPrice(createInvoiceRequest.getRentId()).isSuccess()) {
+            System.out.println("buraya geldi invoice ekleme");
+            invoice.setTotalPrice(CalculateDelayedDaysPrice(createInvoiceRequest.getRentId()).getData());
 
-        this.invoiceDao.save(invoice);
+        }else {
+            invoice.setTotalPrice(calculateAndSetTotalPrice(createInvoiceRequest.getRentId()));
+        }
+            this.invoiceDao.save(invoice);
 
-        return new SuccessResult("Fatura başarıyla eklendi.");
+            return new SuccessResult("Fatura başarıyla eklendi.");
+
     }
 
     @Override
@@ -60,7 +64,7 @@ public class InvoiceManager implements InvoiceService {
         checkIfInvoiceExists(updateInvoiceRequest.getInvoiceId());
         Invoice invoice = this.modelMapperService.forRequest().map(updateInvoiceRequest, Invoice.class);
 
-        calculateAndSetTotalPrice(updateInvoiceRequest.getRentId(), invoice);
+        invoice.setTotalPrice(calculateAndSetTotalPrice(updateInvoiceRequest.getRentId()));
         this.invoiceDao.save(invoice);
 
         return new SuccessResult("Fatura başarıyla güncellendi.");
@@ -125,20 +129,32 @@ public class InvoiceManager implements InvoiceService {
     }
 
 
+    public DataResult<Double> CalculateDelayedDaysPrice(int rentId){
+        System.out.println(this.rentService.calculateDelayedDayPrice(rentId).getData() + "data");
+        if(this.rentService.calculateDelayedDayPrice(rentId).getData() != null) {
+            double totalPrice = this.rentService.calculateDelayedDayPrice(rentId).getData() + this.orderedAdditionalServiceService.calculateOrderedServicePrice(rentId);
+
+            return new SuccessDataResult<Double>(totalPrice, "Ekstra günler için fatura fiyatlandırması oluşturuldu.");
+        }
+        return new ErrorDataResult<Double>("Gecikme yok.");
+    }
+
+
+
     private void checkIfRentIdAlreadyExists(int rentId) throws BusinessException{
         if(this.invoiceDao.existsByRent_RentId(rentId)){
             throw new BusinessException("Bu id'ye ait bir kiralama faturası mevcut.");
         }
     }
 
-    private void calculateAndSetTotalPrice(int rentId, Invoice invoice){
+    private double calculateAndSetTotalPrice(int rentId){
         double rentPrice = this.rentService.calculateRentPrice(rentId);
 
         double orderedServicePrice = this.orderedAdditionalServiceService.calculateOrderedServicePrice(rentId);
 
-        double totalInvoicePrice = rentPrice + orderedServicePrice;
 
-        invoice.setTotalPrice(totalInvoicePrice);
+        return rentPrice + orderedServicePrice;
+
     }
 
     private void checkIfInvoiceExists(int invoiceId){
@@ -152,4 +168,6 @@ public class InvoiceManager implements InvoiceService {
             throw new BusinessException("Kullanıcı bulunamadı.");
         }
     }
+
+
 }

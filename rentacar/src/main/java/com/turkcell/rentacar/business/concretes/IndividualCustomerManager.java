@@ -37,6 +37,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
         IndividualCustomer individualCustomer = this.modelMapperService.forRequest()
                 .map(createIndividualCustomerRequest, IndividualCustomer.class);
 
+        this.individualCustomerDao.save(individualCustomer);
         return new SuccessResult("Bireysel müşteri başarıyla eklendi.");
 
     }

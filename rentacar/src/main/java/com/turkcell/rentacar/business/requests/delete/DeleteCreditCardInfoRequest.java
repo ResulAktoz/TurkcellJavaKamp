@@ -10,11 +10,10 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeleteInvoiceRequest {
+public class DeleteCreditCardInfoRequest {
 
     @NotNull
     @Min(1)
-    private int invoiceId;
-
+    private int creditCardInfoId;
 
 }

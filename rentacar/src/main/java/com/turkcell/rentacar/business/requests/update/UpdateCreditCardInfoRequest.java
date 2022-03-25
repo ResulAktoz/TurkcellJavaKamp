@@ -12,33 +12,24 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateRentRequest {
-
-    private int rentId;
-    @NotNull
-    private LocalDate rentStartDate;
-
-    @NotNull
-    private LocalDate rentReturnDate;
+public class UpdateCreditCardInfoRequest {
 
     @NotNull
     @Min(1)
-    private int rentCityId;
+    private int creditCardInfoId;
 
     @NotNull
-    @Min(1)
-    private int returnCityId;
+    @Size(min = 16)
+    private String creditCarNo;
 
     @NotNull
-    @Size(min = 2)
-    private String startedKilometerInfo;
+    @Size(min = 4)
+    private String cardHolder;
 
     @NotNull
-    @Min(1)
-    private int carId;
+    private LocalDate expirationDate;
 
     @NotNull
-    @Min(1)
-    private int userId;
-
+    @Size(min = 3)
+    private String cvv;
 }

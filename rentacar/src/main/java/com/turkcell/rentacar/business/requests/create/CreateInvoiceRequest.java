@@ -21,4 +21,6 @@ public class CreateInvoiceRequest {
     @NotNull
     @Min(1)
     private int rentId;
+
+
 }

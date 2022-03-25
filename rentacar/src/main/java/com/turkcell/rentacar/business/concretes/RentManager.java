@@ -6,13 +6,11 @@ import com.turkcell.rentacar.business.dtos.getDto.GetRentDto;
 import com.turkcell.rentacar.business.dtos.listDto.RentListDto;
 import com.turkcell.rentacar.business.requests.create.CreateRentRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteRentRequest;
+import com.turkcell.rentacar.business.requests.update.UpdateRentDeliveryDateRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateRentRequest;
 import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
-import com.turkcell.rentacar.core.utilities.results.DataResult;
-import com.turkcell.rentacar.core.utilities.results.Result;
-import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;
-import com.turkcell.rentacar.core.utilities.results.SuccessResult;
+import com.turkcell.rentacar.core.utilities.results.*;
 import com.turkcell.rentacar.dataAccess.abstracts.RentDao;
 import com.turkcell.rentacar.entities.concretes.Rent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,8 +67,8 @@ public class RentManager implements RentService {
 
     @Override
     public Result addForIndividualCustomer(CreateRentRequest createRentRequest) throws BusinessException {
-        checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
-        checkIfCarIsRented(createRentRequest.getCarId());
+        //checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
+        //checkIfCarIsRented(createRentRequest.getCarId());
 
         Rent rent = this.modelMapperService.forRequest()
                 .map(createRentRequest, Rent.class);
@@ -95,6 +93,17 @@ public class RentManager implements RentService {
         this.rentDao.deleteById(deleteRentRequest.getRentId());
 
         return new SuccessResult("Kiralama başarıyla kaldırıldı.");
+    }
+
+    @Override
+    public Result updateRentDeliveryDate(UpdateRentDeliveryDateRequest updateRentDeliveryDateRequest) throws BusinessException {
+        checkIfRentIdExist(updateRentDeliveryDateRequest.getRentId());
+
+        this.rentDao.updateDeliveryDateToRentByRentId(updateRentDeliveryDateRequest.getRentId(), updateRentDeliveryDateRequest.getDeliveryDate());
+
+
+
+        return new SuccessResult("Bilgiler başarıyla güncellendi.");
     }
 
     @Override
@@ -129,6 +138,22 @@ public class RentManager implements RentService {
                 .collect(Collectors.toList());
 
         return new SuccessDataResult<List<RentListDto>>(response, "Car id'sine göre listelendi.");
+    }
+
+    @Override
+    public DataResult<Double> calculateDelayedDayPrice(int rentId){
+        Rent rent=this.rentDao.getById(rentId);
+        if(!checkDeliveryDateAndReturnDateIsDifferent(rent.getDeliveryDate(),rent.getRentReturnDate())) {
+            System.out.println("tarhiler farklı");
+            long delayedDays = (ChronoUnit.DAYS.between(rent.getDeliveryDate(), rent.getRentReturnDate()) + 1)*-1;
+            System.out.println(delayedDays + " tarih farkı");
+            double dailyPrice = rent.getCar().getDailyPrice();
+            double delayedDaysPrice = (delayedDays * dailyPrice);
+
+            return new SuccessDataResult<Double>(delayedDaysPrice,"gecikmeli fiyat hesaplandı");
+
+        }
+        return new ErrorDataResult<Double>("Teslimat tarihi gecikmemiş.");
     }
 
     @Override
@@ -176,6 +201,17 @@ public class RentManager implements RentService {
        }
     }
 
+    private boolean checkDeliveryDateAndReturnDateIsDifferent(LocalDate deliveryDate, LocalDate returnDate){
+        System.out.println(deliveryDate);
+        if(deliveryDate !=null) {
+            if (deliveryDate.equals(returnDate)) {
+                System.out.println("tarihler aynı");
+                return true;
+            }
+        }
+        return false;
+
+    }
 
 
 

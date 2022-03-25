@@ -22,4 +22,5 @@ public interface InvoiceService {
     DataResult<GetInvoiceDto> getByInvoiceId(int invoiceId) throws BusinessException;
     DataResult<List<InvoiceListDto>> getByUserId(int userId) throws BusinessException;
     DataResult<List<InvoiceListDto>> findByCreationDayBetween(LocalDate startDate, LocalDate endDate);
+
 }

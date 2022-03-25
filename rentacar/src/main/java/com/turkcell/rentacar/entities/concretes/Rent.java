@@ -43,6 +43,10 @@ public class Rent {
     @Column(name = "ended_kilometer_info")
     private String endedKilometerInfo;
 
+    @Column(name = "delivery_date")
+    private LocalDate deliveryDate;
+
+
     @ManyToOne()
     @JoinColumn(name = "car_id")
     private Car car;
@@ -54,8 +58,8 @@ public class Rent {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "rent")
-    private Invoice invoice;
+    @OneToMany(mappedBy = "rent")
+    private List<Invoice> invoices;
 
     @OneToMany(mappedBy = "rent")
     private List<Payment> payments;

@@ -1,5 +1,6 @@
 package com.turkcell.rentacar.entities.abstracts;
 
+import com.turkcell.rentacar.entities.concretes.CreditCardInfo;
 import com.turkcell.rentacar.entities.concretes.Invoice;
 import com.turkcell.rentacar.entities.concretes.Rent;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Invoice> invoices;
+
+    @OneToMany(mappedBy = "user")
+    private List<CreditCardInfo> creditCardInfos;
 
 
 }
