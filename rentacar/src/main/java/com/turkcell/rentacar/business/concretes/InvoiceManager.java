@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,7 @@ public class InvoiceManager implements InvoiceService {
         }else {
             invoice.setTotalPrice(calculateAndSetTotalPrice(createInvoiceRequest.getRentId()));
         }
+
             this.invoiceDao.save(invoice);
 
             return new SuccessResult(BusinessMessages.INVOICE_ADDED_SUCCESSFULLY);
@@ -170,6 +172,25 @@ public class InvoiceManager implements InvoiceService {
         if(!this.invoiceDao.findByUser_UserId(userId)){
             throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
         }
+    }
+
+    private double calculateTotalRentDay(int rentId){
+
+        //Rent rent = this.rentService.getById(rentId);
+
+        long totalRentDay = ChronoUnit.DAYS.between(this.rentService.getById(rentId).getData().getRentReturnDate(), this.rentService.getById(rentId).getData().getRentStartDate());
+        return totalRentDay;
+
+
+       /* if(rent.getDeliveryDate()==null) {
+            long totalRentDay = ChronoUnit.DAYS.between(rent.getRentReturnDate(), rent.getRentStartDate());
+
+        }if(!rent.getDeliveryDate().isEqual(rent.getRentReturnDate())){
+            long totalRentDay = ChronoUnit.DAYS.between(rent.getDeliveryDate(), rent.getRentStartDate());
+            return totalRentDay;
+        }
+
+        return calculateTotalRentDay(rent); */
     }
 
 

@@ -26,26 +26,26 @@ public class AdditionalServicesController {
         this.additionalServiceService = additionalServiceService;
     }
     @PostMapping("/add")
-    Result add(@RequestBody @Valid CreateAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException{
+    Result add(@RequestBody @Valid CreateAdditionalServiceRequest createAdditionalServiceRequest){
 
         return this.additionalServiceService.add(createAdditionalServiceRequest);
 
     }
     @PutMapping("/update")
-    Result update(@RequestBody @Valid UpdateAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException{
+    Result update(@RequestBody @Valid UpdateAdditionalServiceRequest updateAdditionalServiceRequest){
 
         return this.additionalServiceService.update(updateAdditionalServiceRequest);
 
     }
     @DeleteMapping("/delete")
-    Result delete(@RequestBody @Valid DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws  BusinessException{
+    Result delete(@RequestBody @Valid DeleteAdditionalServiceRequest deleteAdditionalServiceRequest){
 
         return this.additionalServiceService.delete(deleteAdditionalServiceRequest);
 
     }
 
     @GetMapping("/getAll")
-    DataResult<List<AdditionalServiceListDto>> getAll() throws BusinessException{
+    DataResult<List<AdditionalServiceListDto>> getAll(){
         return this.additionalServiceService.getAll();
 
     }

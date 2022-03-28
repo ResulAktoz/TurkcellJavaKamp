@@ -19,7 +19,6 @@ public class RentListDto {
     private LocalDate rentReturnDate;
     private int rentedCityId;
     private int returnCityId;
-    private int carId;
     private int userId;
     private int invoiceId;
 

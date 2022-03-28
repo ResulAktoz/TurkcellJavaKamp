@@ -26,21 +26,21 @@ public class OrderedAdditionalServiceController {
         this.orderedAdditionalServiceService = orderedAdditionalServiceService;
     }
     @PostMapping("/add")
-    Result add(@RequestBody @Valid CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest) throws BusinessException{
+    Result add(@RequestBody @Valid CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest){
         return this.orderedAdditionalServiceService.add(createOrderedAdditionalServiceRequest);
     }
     @PutMapping("/update")
-    Result update(@RequestBody @Valid UpdateOrderedAdditionalServiceRequest updateOrderedAdditionalServiceRequest) throws BusinessException{
+    Result update(@RequestBody @Valid UpdateOrderedAdditionalServiceRequest updateOrderedAdditionalServiceRequest){
         return this.orderedAdditionalServiceService.update(updateOrderedAdditionalServiceRequest);
     }
 
     @DeleteMapping("/delete")
-    Result delete(@RequestBody @Valid DeleteOrderedAdditionalServiceRequest deleteOrderedAdditionalServiceRequest) throws BusinessException{
+    Result delete(@RequestBody @Valid DeleteOrderedAdditionalServiceRequest deleteOrderedAdditionalServiceRequest){
         return this.orderedAdditionalServiceService.delete(deleteOrderedAdditionalServiceRequest);
 
     }
     @GetMapping("/getAll")
-    DataResult<List<OrderedAdditionalServiceListDto>> getAll() throws BusinessException{
+    DataResult<List<OrderedAdditionalServiceListDto>> getAll(){
         return this.orderedAdditionalServiceService.getAll();
     }
 

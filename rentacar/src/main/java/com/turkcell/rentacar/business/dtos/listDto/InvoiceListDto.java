@@ -11,14 +11,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class InvoiceListDto {
     private int invoiceId;
-    private String invoiceNumber;
-    private LocalDate creationDay;
-    private LocalDate rentStartDate;
-    private LocalDate rentReturnDate;
-    private int totalRentDay;
-    private double totalPrice;
-
     private int userId;
-
+    private String invoiceNumber;
+    private LocalDate creationDate;
+    private double totalPrice;
     private int rentId;
 }

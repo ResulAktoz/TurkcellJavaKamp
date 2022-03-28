@@ -3,6 +3,7 @@ package com.turkcell.rentacar.business.concretes;
 import com.turkcell.rentacar.business.abstracts.CarMaintenanceService;
 import com.turkcell.rentacar.business.abstracts.RentService;
 import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
+import com.turkcell.rentacar.business.dtos.getDto.GetRentDto;
 import com.turkcell.rentacar.business.dtos.listDto.RentListDto;
 import com.turkcell.rentacar.business.requests.create.CreateRentRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteRentRequest;
@@ -124,6 +125,16 @@ public class RentManager implements RentService {
         return new SuccessDataResult<List<RentListDto>>(response, BusinessMessages.RENTS_LISTED_SUCCESSFULLY);
     }
 
+    @Override
+    public DataResult<GetRentDto> getById(int rentId) {
+        Rent rent = this.rentDao.getById(rentId);
+        GetRentDto response = this.modelMapperService.forDto().map(rent, GetRentDto.class);
+
+        return new SuccessDataResult<GetRentDto>(response, BusinessMessages.RENT_LISTED_SUCCESSFULLY);
+    }
+
+
+
 
     @Override
     public DataResult<Double> calculateDelayedDayPrice(int rentId){
@@ -169,14 +180,16 @@ public class RentManager implements RentService {
 
     private void checkIfCarIsAlreadyInMaintenance(int id) throws BusinessException{
 
-       if(!this.carMaintenanceService.checkIfCarMaintenanceIdExist(id).isSuccess()){
+       if(this.carMaintenanceService.checkIfCarMaintenanceIdExist(id).isSuccess()){
            throw new BusinessException(BusinessMessages.CAR_ALREADY_IN_MAINTENANCE);
        }
     }
 
     private boolean checkDeliveryDateAndReturnDateIsDifferent(LocalDate deliveryDate, LocalDate returnDate){
-        System.out.println(deliveryDate);
-        if(deliveryDate !=null) {
+        if(deliveryDate == null){
+            return true;
+        }
+         else if(deliveryDate !=null ) {
             if (deliveryDate.equals(returnDate)) {
                 System.out.println("tarihler aynı");
                 return true;

@@ -114,7 +114,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 
     private void checkIfCarIsAlreadyInRent(int carId){
-        if(!this.rentService.checkIfCarIsRented(carId).isSuccess()){
+        if(this.rentService.checkIfCarIsRented(carId).isSuccess()){
             throw new BusinessException(BusinessMessages.CAR_ALREADY_IN_RENT);
         }
     }

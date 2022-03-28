@@ -126,6 +126,7 @@ public class BusinessMessages {
     public static final String CAR_NOT_IN_RENT = "CAR_NOT_IN_RENT";
     public static final String RENT_TOTAL_PRICE_CALCULATED_SUCCESSFULLY = "RENT_TOTAL_PRICE_CALCULATED_SUCCESSFULLY";
     public static final String RENT_NOT_FOUND = "RENT_NOT_FOUND";
+    public static final String TOTAL_RENT_DAY_CALCULATED = "TOTAL_RENT_DAY_CALCULATED";
 
     // USER
     public static final String USER_UPDATED_SUCCESSFULLY = "USER_UPDATED_SUCCESSFULLY";

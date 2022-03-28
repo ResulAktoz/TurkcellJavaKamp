@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +16,11 @@ public class CreateCarMaintenanceRequest {
     @NotNull
     private String description;
 
-    private Date returnDate;
+    @NotNull
+    private LocalDate startDate;
+
+    @NotNull
+    private LocalDate returnDate;
 
     @NotNull
     private int carId;

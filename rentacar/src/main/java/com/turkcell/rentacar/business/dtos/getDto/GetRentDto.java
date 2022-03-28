@@ -15,11 +15,11 @@ public class GetRentDto {
     private int rentId;
     private LocalDate rentStartDate;
     private LocalDate rentReturnDate;
-    private int rentCityId;
-    private int returnCityId;
-    private int carId;
+    private String rentedCityName;
+    private String returnCityName;
+    private String brandName;
+    //private int carId;
     private int userId;
-    private int invoiceId;
     private List<GetOrderedAdditionalServiceDto> orderedAdditionalServices;
 
 }
