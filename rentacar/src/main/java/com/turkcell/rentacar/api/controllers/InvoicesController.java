@@ -10,6 +10,8 @@ import com.turkcell.rentacar.core.utilities.results.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -24,19 +26,19 @@ public class InvoicesController {
     }
 
     @PostMapping("/add")
-    public Result add(CreateInvoiceRequest createInvoiceRequest) {
+    public Result add(@RequestBody @Valid CreateInvoiceRequest createInvoiceRequest) {
 
         return this.invoiceService.add(createInvoiceRequest);
     }
 
     @PutMapping("/update")
-    public Result update(UpdateInvoiceRequest updateInvoiceRequest) {
+    public Result update(@RequestBody @Valid UpdateInvoiceRequest updateInvoiceRequest) {
 
         return this.invoiceService.update(updateInvoiceRequest);
     }
 
     @DeleteMapping("/delete")
-    public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) {
+    public Result delete(@RequestBody @Valid DeleteInvoiceRequest deleteInvoiceRequest) {
 
         return this.invoiceService.delete(deleteInvoiceRequest);
     }

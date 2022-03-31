@@ -9,6 +9,7 @@ import com.turkcell.rentacar.business.requests.update.UpdateRentDeliveryDateRequ
 import com.turkcell.rentacar.business.requests.update.UpdateRentRequest;
 import com.turkcell.rentacar.core.utilities.results.DataResult;
 import com.turkcell.rentacar.core.utilities.results.Result;
+import com.turkcell.rentacar.entities.concretes.Rent;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,9 +27,10 @@ public interface RentService {
 
     DataResult<List<RentListDto>> getAll();
     DataResult<GetRentDto> getById(int rentId);
-    DataResult<Double> calculateRentPrice(int rentId);;
-    DataResult<Double> calculateDelayedDayPrice(int rentId);
+    double calculateRentPrice(int rentId);;
     Result checkIfCarIsRented(int carId);
+
+    Rent getRentByRentId(int rentId);
 
 
 

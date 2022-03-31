@@ -25,15 +25,13 @@ public class Invoice {
     @Column(name = "invoice_number")
     private String invoiceNumber;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "creation_date")
     private LocalDate creationDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "rent_start_day")
     private LocalDate rentStartDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+
     @Column(name = "rent_return_date")
     private LocalDate rentReturnDate;
 

@@ -68,7 +68,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
         return new SuccessDataResult<List<IndividualCustomerListDto>>(response, BusinessMessages.INDIVIDUAL_CUSTOMER_LISTED_SUCCESSFULLY);
     }
 
-    private void checkIfIndividualCustomerExistsById(int userId){
+    public void checkIfIndividualCustomerExistsById(int userId){
         if(!this.individualCustomerDao.existsById(userId)){
             throw new BusinessException(BusinessMessages.INDIVIDUAL_CUSTOMER_NOT_FOUND);
         }

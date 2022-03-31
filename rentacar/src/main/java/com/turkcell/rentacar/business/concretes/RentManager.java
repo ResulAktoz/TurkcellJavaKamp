@@ -1,9 +1,9 @@
 package com.turkcell.rentacar.business.concretes;
 
-import com.turkcell.rentacar.business.abstracts.CarMaintenanceService;
-import com.turkcell.rentacar.business.abstracts.RentService;
+import com.turkcell.rentacar.business.abstracts.*;
 import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.getDto.GetRentDto;
+import com.turkcell.rentacar.business.dtos.listDto.InvoiceListDto;
 import com.turkcell.rentacar.business.dtos.listDto.RentListDto;
 import com.turkcell.rentacar.business.requests.create.CreateRentRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteRentRequest;
@@ -14,13 +14,16 @@ import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentacar.core.utilities.results.*;
 import com.turkcell.rentacar.dataAccess.abstracts.RentDao;
+import com.turkcell.rentacar.entities.concretes.Invoice;
 import com.turkcell.rentacar.entities.concretes.Rent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,13 +34,22 @@ public class RentManager implements RentService {
     private RentDao rentDao;
     private ModelMapperService modelMapperService;
     private CarMaintenanceService carMaintenanceService;
+    private CarService carService;
+    private IndividualCustomerService individualCustomerService;
+    private CorporateCustomerService corporateCustomerService;
+
 
     @Autowired
     public RentManager(RentDao rentDao, ModelMapperService modelMapperService,
-                       @Lazy CarMaintenanceService carMaintenanceService) {
+                       CarMaintenanceService carMaintenanceService, CarService carService,
+                       IndividualCustomerService individualCustomerService, CorporateCustomerService corporateCustomerService) {
         this.rentDao = rentDao;
         this.modelMapperService = modelMapperService;
         this.carMaintenanceService = carMaintenanceService;
+        this.carService = carService;
+        this.individualCustomerService = individualCustomerService;
+        this.corporateCustomerService = corporateCustomerService;
+
     }
 
 
@@ -45,9 +57,12 @@ public class RentManager implements RentService {
     public Result addForCorporateCustomer(CreateRentRequest createRentRequest){
         checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
         checkIfCarIsRented(createRentRequest.getCarId());
+        this.individualCustomerService.checkIfIndividualCustomerExistsById(createRentRequest.getUserId());
 
         Rent rent = this.modelMapperService.forRequest()
                 .map(createRentRequest, Rent.class);
+        rent.setStartedKilometerInfo(rent.getStartedKilometerInfo());
+
         this.rentDao.save(rent);
 
         return new SuccessResult(BusinessMessages.RENT_ADDED_SUCCESSFULLY);
@@ -56,11 +71,16 @@ public class RentManager implements RentService {
 
     @Override
     public Result addForIndividualCustomer(CreateRentRequest createRentRequest) {
-        //checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
-        //checkIfCarIsRented(createRentRequest.getCarId());
+        checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
+        checkIfCarIsRented(createRentRequest.getCarId());
+        this.individualCustomerService.checkIfIndividualCustomerExistsById(createRentRequest.getUserId());
+
 
         Rent rent = this.modelMapperService.forRequest()
                 .map(createRentRequest, Rent.class);
+
+        rent.setStartedKilometerInfo(rent.getStartedKilometerInfo());
+
         this.rentDao.save(rent);
 
         return new SuccessResult(BusinessMessages.RENT_ADDED_SUCCESSFULLY);
@@ -95,13 +115,12 @@ public class RentManager implements RentService {
 
     @Override
     public Result updateRentDeliveryDate(UpdateRentDeliveryDateRequest updateRentDeliveryDateRequest) {
+        Rent rent = this.modelMapperService.forRequest().map(updateRentDeliveryDateRequest, Rent.class);
+        checkDeliveryDateAndReturnDateIsDifferent(updateRentDeliveryDateRequest.getRentId());
+            this.rentDao.updateDeliveryDateToRentByRentId(updateRentDeliveryDateRequest.getRentId(),
+                    updateRentDeliveryDateRequest.getDeliveryDate());
+            return new SuccessResult(BusinessMessages.RENT_UPDATED_SUCCESSFULLY);
 
-
-        this.rentDao.updateDeliveryDateToRentByRentId(updateRentDeliveryDateRequest.getRentId(),
-                updateRentDeliveryDateRequest.getDeliveryDate());
-
-
-        return new SuccessResult(BusinessMessages.RENT_UPDATED_SUCCESSFULLY);
     }
 
     @Override
@@ -136,21 +155,7 @@ public class RentManager implements RentService {
 
 
 
-    @Override
-    public DataResult<Double> calculateDelayedDayPrice(int rentId){
-        Rent rent=this.rentDao.getById(rentId);
-        if(!checkDeliveryDateAndReturnDateIsDifferent(rent.getDeliveryDate(),rent.getRentReturnDate())) {
-            System.out.println("tarhiler farklı");
-            long delayedDays = (ChronoUnit.DAYS.between(rent.getDeliveryDate(), rent.getRentReturnDate()) + 1)*-1;
-            System.out.println(delayedDays + " tarih farkı");
-            double dailyPrice = rent.getCar().getDailyPrice();
-            double delayedDaysPrice = (delayedDays * dailyPrice);
 
-            return new SuccessDataResult<Double>(delayedDaysPrice,"gecikmeli fiyat hesaplandı");
-
-        }
-        return new ErrorDataResult<Double>("Teslimat tarihi gecikmemiş.");
-    }
 
     @Override
     public Result checkIfCarIsRented(int carId){
@@ -165,17 +170,29 @@ public class RentManager implements RentService {
 
     }
 
+    @Override
+    public Rent getRentByRentId(int rentId) {
+        checkIfRentIdExists(rentId);
+        return this.rentDao.getById(rentId);
+    }
 
 
     @Override
-    public DataResult<Double> calculateRentPrice(int rentId) {
-        Rent rent = this.rentDao.getById(rentId);
+    public double calculateRentPrice(int rentId) {
 
-        long usageTime = ChronoUnit.DAYS.between(rent.getRentStartDate(), rent.getRentReturnDate());
+        checkDeliveryDateAndReturnDateIsDifferent(rentId);
 
-        double totalRentPrice = (rent.getCar().getDailyPrice()* usageTime);
+        long usageTime = ChronoUnit.DAYS.between(this.rentDao.getById(rentId).getRentStartDate(), this.rentDao.getById(rentId).getRentReturnDate());
 
-        return new SuccessDataResult<>(totalRentPrice, BusinessMessages.RENT_TOTAL_PRICE_CALCULATED_SUCCESSFULLY);
+        double dailyPrice = (this.rentDao.getById(rentId).getCar().getDailyPrice());
+
+        double rentPrice = (usageTime * dailyPrice);
+
+
+        return rentPrice;
+
+
+
     }
 
     private void checkIfCarIsAlreadyInMaintenance(int id) throws BusinessException{
@@ -185,18 +202,21 @@ public class RentManager implements RentService {
        }
     }
 
-    private boolean checkDeliveryDateAndReturnDateIsDifferent(LocalDate deliveryDate, LocalDate returnDate){
-        if(deliveryDate == null){
-            return true;
-        }
-         else if(deliveryDate !=null ) {
-            if (deliveryDate.equals(returnDate)) {
-                System.out.println("tarihler aynı");
-                return true;
-            }
-        }
-        return false;
+    private Result checkDeliveryDateAndReturnDateIsDifferent(int rentId){
 
+        if(this.rentDao.getById(rentId).getDeliveryDate()!= null && this.rentDao.getById(rentId).getDeliveryDate().isAfter(this.rentDao.getById(rentId).getRentReturnDate())){
+            this.rentDao.getById(rentId).setRentReturnDate(this.rentDao.getById(rentId).getDeliveryDate());
+
+        }else{
+            this.rentDao.getById(rentId).setDeliveryDate(this.rentDao.getById(rentId).getRentReturnDate());
+        }
+        return new SuccessResult(BusinessMessages.RENT_DELIVERY_DATE_DID_NOT_CHANGE);
+    }
+
+    private void checkIfRentIdExists(int rentId){
+        if(!this.rentDao.existsById(rentId)){
+            throw new BusinessException(BusinessMessages.RENT_NOT_FOUND);
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.requests.create;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class CreateInvoiceRequest {
     @Size(min = 2)
     private String invoiceNumber;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
 
     @NotNull

@@ -9,7 +9,7 @@ public class CreateCreditCardInfoRequest {
 
     @NotNull
     @Size(min = 16)
-    private String creditCarNo;
+    private String creditCardNo;
 
     @NotNull
     @Size(min = 4)
@@ -17,6 +17,10 @@ public class CreateCreditCardInfoRequest {
 
     @NotNull
     private LocalDate expirationDate;
+
+   /* private int expirationMonth;
+
+    private int expirationYear; */
 
     @NotNull
     @Size(min = 3)

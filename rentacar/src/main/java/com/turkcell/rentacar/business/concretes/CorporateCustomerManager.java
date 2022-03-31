@@ -34,7 +34,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
     }
 
     @Override
-    public Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest) throws BusinessException {
+    public Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest)  {
         CorporateCustomer corporateCustomer = this.modelMapperService.forRequest()
                 .map(createCorporateCustomerRequest, CorporateCustomer.class);
 
@@ -43,7 +43,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
     }
 
     @Override
-    public Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) throws BusinessException {
+    public Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) {
         checkIfCorporateCustomerExistById(updateCorporateCustomerRequest.getUserId());
 
         CorporateCustomer corporateCustomer = this.modelMapperService.forRequest()
@@ -55,7 +55,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
     }
 
     @Override
-    public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) throws BusinessException {
+    public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest){
         checkIfCorporateCustomerExistById(deleteCorporateCustomerRequest.getUserId());
 
         this.corporateCustomerDao.deleteById(deleteCorporateCustomerRequest.getUserId());
@@ -64,7 +64,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
     }
 
     @Override
-    public DataResult<List<CorporateCustomerListDto>> getAll() throws BusinessException {
+    public DataResult<List<CorporateCustomerListDto>> getAll(){
         List<CorporateCustomer> result = this.corporateCustomerDao.findAll();
 
         List<CorporateCustomerListDto> response = result.stream()
@@ -77,7 +77,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
 
 
-    private void checkIfCorporateCustomerExistById(int userId) throws BusinessException{
+    public void checkIfCorporateCustomerExistById(int userId){
 
        if(!this.corporateCustomerDao.existsById(userId)){
            throw new BusinessException(BusinessMessages.CORPORATE_CUSTOMER_NOT_FOUND);

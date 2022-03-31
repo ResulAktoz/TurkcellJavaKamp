@@ -18,5 +18,6 @@ public interface CorporateCustomerService {
     Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest);
 
     DataResult<List<CorporateCustomerListDto>> getAll();
+    void checkIfCorporateCustomerExistById(int userId);
 
 }

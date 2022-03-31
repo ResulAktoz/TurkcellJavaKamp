@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -47,15 +48,11 @@ public class InvoiceManager implements InvoiceService {
     public Result add(CreateInvoiceRequest createInvoiceRequest) {
         Invoice invoice = this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 
-        if(CalculateDelayedDaysPrice(createInvoiceRequest.getRentId()).isSuccess()) {
-            System.out.println("buraya geldi invoice ekleme");
-            invoice.setTotalPrice(CalculateDelayedDaysPrice(createInvoiceRequest.getRentId()).getData());
-
-        }else {
-            invoice.setTotalPrice(calculateAndSetTotalPrice(createInvoiceRequest.getRentId()));
-        }
+        setInvoiceFields(createInvoiceRequest.getRentId(), invoice);
 
             this.invoiceDao.save(invoice);
+
+
 
             return new SuccessResult(BusinessMessages.INVOICE_ADDED_SUCCESSFULLY);
 
@@ -68,6 +65,7 @@ public class InvoiceManager implements InvoiceService {
 
         invoice.setTotalPrice(calculateAndSetTotalPrice(updateInvoiceRequest.getRentId()));
         this.invoiceDao.save(invoice);
+
 
         return new SuccessResult(BusinessMessages.INVOICE_UPDATED_SUCCESSFULLY);
 
@@ -93,6 +91,7 @@ public class InvoiceManager implements InvoiceService {
 
         return new SuccessDataResult<List<InvoiceListDto>>(response, BusinessMessages.INVOICE_LISTED_SUCCESSFULLY);
     }
+
 
 
     @Override
@@ -124,23 +123,16 @@ public class InvoiceManager implements InvoiceService {
     }
 
 
-    public DataResult<Double> CalculateDelayedDaysPrice(int rentId){
-        System.out.println(this.rentService.calculateDelayedDayPrice(rentId).getData() + "data");
-        if(this.rentService.calculateDelayedDayPrice(rentId).getData() != null) {
+    /*public DataResult<Double> CalculateDelayedDaysPrice(int rentId){
+        if(this.rentService.calculateDelayedDayPrice(rentId) != null) {
             double totalPrice = this.rentService.calculateDelayedDayPrice(rentId).getData() + this.orderedAdditionalServiceService.calculateOrderedServicePrice(rentId);
 
             return new SuccessDataResult<Double>(totalPrice, "Ekstra günler için fatura fiyatlandırması oluşturuldu.");
         }
         return new ErrorDataResult<Double>("Gecikme yok.");
-    }
+    } */
 
 
-
-    private void checkIfRentExists(int rentId) throws BusinessException{
-        if(!this.invoiceDao.existsByRent_RentId(rentId)){
-            throw new BusinessException(BusinessMessages.INVOICE_NOT_FOUND);
-        }
-    }
 
     private double calculateIfCityIsDifferentPrice(int rentId){
         if(this.rentService.checkIfReturnCityIsDifferentFromRentedCity(rentId).isSuccess()){
@@ -150,13 +142,13 @@ public class InvoiceManager implements InvoiceService {
     }
 
     private double calculateAndSetTotalPrice(int rentId){
-        double rentPrice = this.rentService.calculateRentPrice(rentId).getData();
+        double rentPrice = this.rentService.calculateRentPrice(rentId);
 
         double orderedServicePrice = this.orderedAdditionalServiceService.calculateOrderedServicePrice(rentId);
 
         double differentCityPrice = calculateIfCityIsDifferentPrice(rentId);
 
-        return rentPrice + orderedServicePrice+ differentCityPrice;
+        return (rentPrice + orderedServicePrice+ differentCityPrice);
 
     }
 
@@ -174,23 +166,23 @@ public class InvoiceManager implements InvoiceService {
         }
     }
 
-    private double calculateTotalRentDay(int rentId){
 
-        //Rent rent = this.rentService.getById(rentId);
+    private void setInvoiceFields(int rentId, Invoice invoice){
 
-        long totalRentDay = ChronoUnit.DAYS.between(this.rentService.getById(rentId).getData().getRentReturnDate(), this.rentService.getById(rentId).getData().getRentStartDate());
-        return totalRentDay;
+        Rent rent = this.rentService.getRentByRentId(rentId);
 
+        double totalPrice = calculateAndSetTotalPrice(rentId);
 
-       /* if(rent.getDeliveryDate()==null) {
-            long totalRentDay = ChronoUnit.DAYS.between(rent.getRentReturnDate(), rent.getRentStartDate());
+        invoice.setTotalPrice(totalPrice);
 
-        }if(!rent.getDeliveryDate().isEqual(rent.getRentReturnDate())){
-            long totalRentDay = ChronoUnit.DAYS.between(rent.getDeliveryDate(), rent.getRentStartDate());
-            return totalRentDay;
-        }
+        invoice.setRentReturnDate(rent.getRentReturnDate());
 
-        return calculateTotalRentDay(rent); */
+        invoice.setRentStartDate(rent.getRentStartDate());
+
+        invoice.setTotalRentDay((int) (ChronoUnit.DAYS.between(rent.getRentStartDate(),rent.getRentReturnDate())));
+
+        invoice.setUser(rent.getUser());
+
     }
 
 

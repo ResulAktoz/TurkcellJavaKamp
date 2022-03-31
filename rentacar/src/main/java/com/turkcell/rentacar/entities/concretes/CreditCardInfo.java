@@ -21,13 +21,19 @@ public class CreditCardInfo {
     private int creditCardInfoId;
 
     @Column(name = "credit_card_no")
-    private String creditCarNo;
+    private String creditCardNo;
 
     @Column(name = "card_holder")
     private String cardHolder;
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
+
+    /* @Column(name = "expiration_month" )
+    private int expirationMonth;
+
+    @Column(name = "expiration_year" )
+    private int expirationYear; */
 
     @Column(name = "cvv")
     private String cvv;
