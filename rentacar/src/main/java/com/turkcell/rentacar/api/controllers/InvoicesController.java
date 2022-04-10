@@ -25,11 +25,6 @@ public class InvoicesController {
         this.invoiceService = invoiceService;
     }
 
-    @PostMapping("/add")
-    public Result add(@RequestBody @Valid CreateInvoiceRequest createInvoiceRequest) {
-
-        return this.invoiceService.add(createInvoiceRequest);
-    }
 
     @PutMapping("/update")
     public Result update(@RequestBody @Valid UpdateInvoiceRequest updateInvoiceRequest) {

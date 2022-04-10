@@ -9,6 +9,7 @@ import com.turkcell.rentacar.business.requests.update.UpdateOrderedAdditionalSer
 import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.results.DataResult;
 import com.turkcell.rentacar.core.utilities.results.Result;
+import com.turkcell.rentacar.entities.concretes.OrderedAdditionalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,8 +46,8 @@ public class OrderedAdditionalServiceController {
     }
 
     @GetMapping("/getByRentId/{rentId}")
-    DataResult<List<OrderedAdditionalServiceListDto>> getByRentId(@RequestParam("rentId")Integer id){
-        return this.orderedAdditionalServiceService.getByRentId(id);
+    List<OrderedAdditionalService> getByRentId(@RequestParam("rentId")int rentId){
+        return this.orderedAdditionalServiceService.findOrderedAdditionalServicesByRent_RentId(rentId);
 
     }
 

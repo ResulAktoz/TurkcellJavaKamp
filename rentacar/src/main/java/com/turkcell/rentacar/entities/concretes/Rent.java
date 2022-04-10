@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name = "rents")
 public class Rent {
 

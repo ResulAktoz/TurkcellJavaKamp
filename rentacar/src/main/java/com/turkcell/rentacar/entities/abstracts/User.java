@@ -2,6 +2,7 @@ package com.turkcell.rentacar.entities.abstracts;
 
 import com.turkcell.rentacar.entities.concretes.CreditCardInfo;
 import com.turkcell.rentacar.entities.concretes.Invoice;
+import com.turkcell.rentacar.entities.concretes.Payment;
 import com.turkcell.rentacar.entities.concretes.Rent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,6 +38,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<CreditCardInfo> creditCardInfos;
+
+    /*@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Payment> payment;*/
 
 
 }

@@ -3,16 +3,14 @@ package com.turkcell.rentacar.business.concretes;
 import com.turkcell.rentacar.business.abstracts.CorporateCustomerService;
 import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.dtos.getDto.GetCorporateCustomerDto;
+import com.turkcell.rentacar.business.dtos.getDto.GetIndividualCustomerDto;
 import com.turkcell.rentacar.business.dtos.listDto.CorporateCustomerListDto;
 import com.turkcell.rentacar.business.requests.create.CreateCorporateCustomerRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteCorporateCustomerRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateCorporateCustomerRequest;
 import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
-import com.turkcell.rentacar.core.utilities.results.DataResult;
-import com.turkcell.rentacar.core.utilities.results.Result;
-import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;
-import com.turkcell.rentacar.core.utilities.results.SuccessResult;
+import com.turkcell.rentacar.core.utilities.results.*;
 import com.turkcell.rentacar.dataAccess.abstracts.CorporateCustomerDao;
 import com.turkcell.rentacar.entities.concretes.CorporateCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +73,17 @@ public class CorporateCustomerManager implements CorporateCustomerService {
         return new SuccessDataResult<List<CorporateCustomerListDto>>(response,BusinessMessages.CORPORATE_CUSTOMER_LISTED_SUCCESSFULLY);
     }
 
+    @Override
+    public DataResult<GetCorporateCustomerDto> getByCorporatelCustomerId(int corporateCustomerId) {
+        CorporateCustomer result = this.corporateCustomerDao.getByUserId(corporateCustomerId);
+        if(result == null){
+            return new ErrorDataResult<GetCorporateCustomerDto>(BusinessMessages.CORPORATE_CUSTOMER_NOT_FOUND);
+        }
+
+        GetCorporateCustomerDto response = this.modelMapperService.forDto().map(result, GetCorporateCustomerDto.class);
+
+        return new SuccessDataResult<GetCorporateCustomerDto>(response, BusinessMessages.CORPORATE_CUSTOMER_GET_BY_ID);
+    }
 
 
     public void checkIfCorporateCustomerExistById(int userId){

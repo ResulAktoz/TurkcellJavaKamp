@@ -49,7 +49,7 @@ public class Invoice {
     @JoinColumn(name = "rent_id")
     private Rent rent;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "payment_id")
     private Payment payment;
 }

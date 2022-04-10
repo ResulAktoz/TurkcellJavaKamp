@@ -26,14 +26,12 @@ public class CreditCardInfo {
     @Column(name = "card_holder")
     private String cardHolder;
 
-    @Column(name = "expiration_date")
-    private LocalDate expirationDate;
-
-    /* @Column(name = "expiration_month" )
+    @Column(name = "expiration_month")
     private int expirationMonth;
 
-    @Column(name = "expiration_year" )
-    private int expirationYear; */
+    @Column(name = "expiration_year")
+    private int expirationYear;
+
 
     @Column(name = "cvv")
     private String cvv;

@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.abstracts;
 
 import com.turkcell.rentacar.business.dtos.getDto.GetCorporateCustomerDto;
+import com.turkcell.rentacar.business.dtos.getDto.GetIndividualCustomerDto;
 import com.turkcell.rentacar.business.dtos.listDto.CorporateCustomerListDto;
 import com.turkcell.rentacar.business.requests.create.CreateCorporateCustomerRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteCorporateCustomerRequest;
@@ -18,6 +19,7 @@ public interface CorporateCustomerService {
     Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest);
 
     DataResult<List<CorporateCustomerListDto>> getAll();
+    DataResult<GetCorporateCustomerDto> getByCorporatelCustomerId(int corporateCustomerId);
     void checkIfCorporateCustomerExistById(int userId);
 
 }

@@ -3,7 +3,6 @@ package com.turkcell.rentacar.business.concretes;
 import com.turkcell.rentacar.business.abstracts.OrderedAdditionalServiceService;
 import com.turkcell.rentacar.business.abstracts.RentService;
 import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
-import com.turkcell.rentacar.business.dtos.getDto.GetOrderedAdditionalServiceDto;
 import com.turkcell.rentacar.business.dtos.listDto.OrderedAdditionalServiceListDto;
 import com.turkcell.rentacar.business.requests.create.CreateOrderedAdditionalServiceRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteOrderedAdditionalServiceRequest;
@@ -77,14 +76,10 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 
 
     @Override
-    public DataResult<List<OrderedAdditionalServiceListDto>> getByRentId(Integer id) {
+    public List<OrderedAdditionalService> findOrderedAdditionalServicesByRent_RentId(int rentId) {
 
-        List<OrderedAdditionalService> result = this.orderedAdditionalServiceDao.findOrderedAdditionalServicesByRent_RentId(id);
-        List<OrderedAdditionalServiceListDto> response = result.stream()
-                .map(orderedAdditionalService -> this.modelMapperService.forDto()
-                        .map(orderedAdditionalService, OrderedAdditionalServiceListDto.class))
-                .collect(Collectors.toList());
-        return new SuccessDataResult<List<OrderedAdditionalServiceListDto>>(response, BusinessMessages.ORDERED_ADDITIONAL_SERVICE_FOR_RENT_LISTED_SUCCESSFULLY);
+
+        return this.orderedAdditionalServiceDao.findOrderedAdditionalServicesByRent_RentId(rentId);
     }
 
     @Override

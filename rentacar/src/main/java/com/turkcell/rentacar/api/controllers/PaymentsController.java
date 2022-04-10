@@ -1,5 +1,7 @@
 package com.turkcell.rentacar.api.controllers;
 
+import com.turkcell.rentacar.api.models.CorporateCustomerPaymentModel;
+import com.turkcell.rentacar.api.models.IndividualCustomerPaymentModel;
 import com.turkcell.rentacar.business.abstracts.PaymentService;
 import com.turkcell.rentacar.business.requests.create.CreatePaymentRequest;
 import com.turkcell.rentacar.business.requests.delete.DeletePaymentRequest;
@@ -8,6 +10,7 @@ import com.turkcell.rentacar.core.utilities.results.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
@@ -20,16 +23,16 @@ public class PaymentsController {
     public PaymentsController(PaymentService paymentService) {
         this.paymentService = paymentService;
     }
-    @PostMapping("/add")
-    public Result add(@RequestBody @Valid CreatePaymentRequest createPaymentRequest){
-        return this.paymentService.add(createPaymentRequest);
+
+    @Transactional
+    @PostMapping("/addForIndividualCustomer")
+    public Result addForIndividualCustomer(@RequestBody @Valid IndividualCustomerPaymentModel individualCustomerPaymentModel){
+        return this.paymentService.addForIndividualCustomer(individualCustomerPaymentModel);
     }
-    @PutMapping("/update")
-    public Result update(@RequestBody @Valid UpdatePaymentRequest updatePaymentRequest){
-        return this.paymentService.update(updatePaymentRequest);
+    @Transactional
+    @PostMapping("/api/addForCorporateCustomer")
+    public Result addForCorporateCustomer(@RequestBody @Valid CorporateCustomerPaymentModel corporateCustomerPaymentModel){
+        return this.paymentService.addForCorporateCustomer(corporateCustomerPaymentModel);
     }
-    @DeleteMapping("/delete")
-    public Result delete(@RequestBody @Valid DeletePaymentRequest deletePaymentRequest){
-        return this.paymentService.delete(deletePaymentRequest);
-    }
+
 }

@@ -15,6 +15,7 @@ import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentacar.core.utilities.results.*;
 import com.turkcell.rentacar.dataAccess.abstracts.RentDao;
 import com.turkcell.rentacar.entities.concretes.Invoice;
+import com.turkcell.rentacar.entities.concretes.OrderedAdditionalService;
 import com.turkcell.rentacar.entities.concretes.Rent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -37,53 +38,61 @@ public class RentManager implements RentService {
     private CarService carService;
     private IndividualCustomerService individualCustomerService;
     private CorporateCustomerService corporateCustomerService;
+    private OrderedAdditionalServiceService orderedAdditionalServiceService;
 
 
     @Autowired
     public RentManager(RentDao rentDao, ModelMapperService modelMapperService,
-                       CarMaintenanceService carMaintenanceService, CarService carService,
-                       IndividualCustomerService individualCustomerService, CorporateCustomerService corporateCustomerService) {
+                       @Lazy CarMaintenanceService carMaintenanceService, CarService carService,
+                       @Lazy IndividualCustomerService individualCustomerService, @Lazy CorporateCustomerService corporateCustomerService,
+                       @Lazy OrderedAdditionalServiceService orderedAdditionalServiceService) {
         this.rentDao = rentDao;
         this.modelMapperService = modelMapperService;
         this.carMaintenanceService = carMaintenanceService;
         this.carService = carService;
         this.individualCustomerService = individualCustomerService;
         this.corporateCustomerService = corporateCustomerService;
+        this.orderedAdditionalServiceService = orderedAdditionalServiceService;
 
     }
 
 
     @Override
-    public Result addForCorporateCustomer(CreateRentRequest createRentRequest){
+    public DataResult<Rent> addForCorporateCustomer(CreateRentRequest createRentRequest){
         checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
         checkIfCarIsRented(createRentRequest.getCarId());
-        this.individualCustomerService.checkIfIndividualCustomerExistsById(createRentRequest.getUserId());
+        this.corporateCustomerService.checkIfCorporateCustomerExistById(createRentRequest.getUserId());
 
-        Rent rent = this.modelMapperService.forRequest()
+        Rent rent = this.modelMapperService.forDto()
                 .map(createRentRequest, Rent.class);
+
+        rent.setOrderedAdditionalServices(this.orderedAdditionalServiceService.findOrderedAdditionalServicesByRent_RentId(rent.getRentId()));
         rent.setStartedKilometerInfo(rent.getStartedKilometerInfo());
 
         this.rentDao.save(rent);
 
-        return new SuccessResult(BusinessMessages.RENT_ADDED_SUCCESSFULLY);
+        return new SuccessDataResult<Rent>(BusinessMessages.RENT_ADDED_SUCCESSFULLY);
 
     }
 
     @Override
-    public Result addForIndividualCustomer(CreateRentRequest createRentRequest) {
+    public DataResult<Rent> addForIndividualCustomer(CreateRentRequest createRentRequest) {
         checkIfCarIsAlreadyInMaintenance(createRentRequest.getCarId());
         checkIfCarIsRented(createRentRequest.getCarId());
         this.individualCustomerService.checkIfIndividualCustomerExistsById(createRentRequest.getUserId());
 
 
-        Rent rent = this.modelMapperService.forRequest()
+        Rent rent = this.modelMapperService.forDto()
                 .map(createRentRequest, Rent.class);
-
         rent.setStartedKilometerInfo(rent.getStartedKilometerInfo());
 
-        this.rentDao.save(rent);
+        this.rentDao.saveAndFlush(rent);
 
-        return new SuccessResult(BusinessMessages.RENT_ADDED_SUCCESSFULLY);
+        rent.setOrderedAdditionalServices(this.orderedAdditionalServiceService.findOrderedAdditionalServicesByRent_RentId(rent.getRentId()));
+        rent.setStartedKilometerInfo(this.carService.getByCarId(createRentRequest.getCarId()).getData().getKilometerInfo());
+
+        Rent newRent = this.rentDao.save(rent);
+        return new SuccessDataResult<Rent>(BusinessMessages.RENT_ADDED_SUCCESSFULLY);
     }
 
     @Override
@@ -171,10 +180,24 @@ public class RentManager implements RentService {
     }
 
     @Override
-    public Rent getRentByRentId(int rentId) {
+    public Rent getByRentId(int rentId) {
         checkIfRentIdExists(rentId);
         return this.rentDao.getById(rentId);
     }
+
+    /*@Override
+    public void checkIfIndividualCustomerExists(int userId) {
+       if(this.individualCustomerService.getByIndividualCustomerId(userId).getData() == null){
+           throw new BusinessException(BusinessMessages.INDIVIDUAL_CUSTOMER_NOT_FOUND);
+       }
+    }
+
+    @Override
+    public void checkIfCorporateCustomerExists(int userId) {
+        if(this.corporateCustomerService.getByCorporatelCustomerId(userId).getData() == null){
+            throw new BusinessException(BusinessMessages.CORPORATE_CUSTOMER_NOT_FOUND);
+        }
+    }*/
 
 
     @Override
@@ -218,6 +241,7 @@ public class RentManager implements RentService {
             throw new BusinessException(BusinessMessages.RENT_NOT_FOUND);
         }
     }
+
 
 
 

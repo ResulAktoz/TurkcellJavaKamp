@@ -9,10 +9,7 @@ import com.turkcell.rentacar.business.requests.delete.DeleteIndividualCustomerRe
 import com.turkcell.rentacar.business.requests.update.UpdateIndividualCustomerRequest;
 import com.turkcell.rentacar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentacar.core.utilities.mapping.ModelMapperService;
-import com.turkcell.rentacar.core.utilities.results.DataResult;
-import com.turkcell.rentacar.core.utilities.results.Result;
-import com.turkcell.rentacar.core.utilities.results.SuccessDataResult;
-import com.turkcell.rentacar.core.utilities.results.SuccessResult;
+import com.turkcell.rentacar.core.utilities.results.*;
 import com.turkcell.rentacar.dataAccess.abstracts.IndividualCustomerDao;
 import com.turkcell.rentacar.entities.concretes.IndividualCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +63,17 @@ public class IndividualCustomerManager implements IndividualCustomerService {
                         .map(individualCustomer, IndividualCustomerListDto.class))
                 .collect(Collectors.toList());
         return new SuccessDataResult<List<IndividualCustomerListDto>>(response, BusinessMessages.INDIVIDUAL_CUSTOMER_LISTED_SUCCESSFULLY);
+    }
+
+    @Override
+    public DataResult<GetIndividualCustomerDto> getByIndividualCustomerId(int individualCustomerId) {
+        IndividualCustomer result = this.individualCustomerDao.getByUserId(individualCustomerId);
+        if(result == null){
+            return new ErrorDataResult<GetIndividualCustomerDto>(BusinessMessages.INDIVIDUAL_CUSTOMER_NOT_FOUND);
+        }
+        GetIndividualCustomerDto response = this.modelMapperService.forDto().map(result, GetIndividualCustomerDto.class);
+
+        return new SuccessDataResult<GetIndividualCustomerDto>(response, BusinessMessages.INDIVIDUAL_CUSTOMER_GET_BY_ID);
     }
 
     public void checkIfIndividualCustomerExistsById(int userId){

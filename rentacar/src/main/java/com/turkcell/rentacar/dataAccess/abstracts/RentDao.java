@@ -18,6 +18,8 @@ public interface RentDao extends JpaRepository<Rent,Integer> {
 
     List<Rent> getByCar_CarId(int carId);
 
+
+
     @Modifying
     @Query("update Rent r set r.endedKilometerInfo = ?2 where r.rentId = ?1")
     int updateEndedKilometerInfoToRentByRentId(int rentId, String endedKilometerInfo);

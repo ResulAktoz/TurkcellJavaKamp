@@ -17,20 +17,6 @@ public class UpdatePaymentRequest {
     @Min(1)
     private int paymentId;
 
-    @NotNull
-    @Size(min = 2)
-    private String creditCardNo;
-
-    @NotNull
-    @Size(min = 2)
-    private String cardHolder;
-
-    @NotNull
-    private LocalDate expirationDate;
-
-    @NotNull
-    @Size(min = 3)
-    private String cvv;
 
     @NotNull
     @Min(1)

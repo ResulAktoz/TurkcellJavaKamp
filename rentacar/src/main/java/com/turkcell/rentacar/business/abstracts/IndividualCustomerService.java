@@ -18,6 +18,7 @@ public interface IndividualCustomerService {
     Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest);
 
     DataResult<List<IndividualCustomerListDto>> getAll();
+    DataResult<GetIndividualCustomerDto> getByIndividualCustomerId(int individualCustomerId);
     void checkIfIndividualCustomerExistsById(int userId);
 
 }

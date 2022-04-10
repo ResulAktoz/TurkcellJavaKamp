@@ -16,9 +16,8 @@ import java.util.List;
 
 public interface RentService {
 
-
-    Result addForCorporateCustomer(CreateRentRequest createRentRequest);
-    Result addForIndividualCustomer(CreateRentRequest createRentRequest);
+    DataResult<Rent> addForCorporateCustomer(CreateRentRequest createRentRequest);
+    DataResult<Rent> addForIndividualCustomer(CreateRentRequest createRentRequest);
     Result update(UpdateRentRequest updateRentRequest);
     Result delete(DeleteRentRequest deleteRentRequest);
     Result updateEndedKilometer(UpdateEndedKilometerInfoRequest updateEndedKilometerInfoRequest);
@@ -30,7 +29,10 @@ public interface RentService {
     double calculateRentPrice(int rentId);;
     Result checkIfCarIsRented(int carId);
 
-    Rent getRentByRentId(int rentId);
+    Rent getByRentId(int rentId);
+
+    //void checkIfIndividualCustomerExists(int userId);
+    //void checkIfCorporateCustomerExists(int userId);
 
 
 

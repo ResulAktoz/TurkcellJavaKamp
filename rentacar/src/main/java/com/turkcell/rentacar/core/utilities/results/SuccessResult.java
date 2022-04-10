@@ -13,4 +13,6 @@ public class SuccessResult extends Result {
 		super(true, message);
 	}
 
+
+
 }

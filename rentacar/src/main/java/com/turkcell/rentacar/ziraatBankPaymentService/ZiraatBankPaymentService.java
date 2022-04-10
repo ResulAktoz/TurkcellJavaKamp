@@ -2,12 +2,14 @@ package com.turkcell.rentacar.ziraatBankPaymentService;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-
 @Service
 public class ZiraatBankPaymentService {
 
-    public boolean payment(String creditCardNo, String cardHolder, LocalDate expirationDate, String cvv){
+
+    public boolean isCardExists(String creditCardNo, String cardHolder,int expirationMonth,int expirationYear, String cvv){
+        return true;
+    }
+    public boolean makePayment(String creditCardNo, String cardHolder, int expirationMonth, int expirationYear, String cvv, double totalPayment){
         return true;
     }
 }

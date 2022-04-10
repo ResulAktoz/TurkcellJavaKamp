@@ -45,13 +45,12 @@ public class InvoiceManager implements InvoiceService {
 
 
     @Override
-    public Result add(CreateInvoiceRequest createInvoiceRequest) {
+    public Result addForCustomer(CreateInvoiceRequest createInvoiceRequest) {
         Invoice invoice = this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 
         setInvoiceFields(createInvoiceRequest.getRentId(), invoice);
 
             this.invoiceDao.save(invoice);
-
 
 
             return new SuccessResult(BusinessMessages.INVOICE_ADDED_SUCCESSFULLY);
@@ -78,6 +77,16 @@ public class InvoiceManager implements InvoiceService {
 
         this.invoiceDao.delete(invoice);
         return new SuccessResult(BusinessMessages.INVOICE_DELETED_SUCCESSFULLY);
+    }
+
+    @Override
+    public Invoice add(int rentId) {
+        // create versiyonla aynı?
+        Rent rent = this.rentService.getByRentId(rentId);
+        Invoice invoice = new Invoice();
+
+        setInvoiceFields(rentId, invoice);
+        return this.invoiceDao.save(invoice);
     }
 
     @Override
@@ -119,19 +128,26 @@ public class InvoiceManager implements InvoiceService {
 
         return new SuccessDataResult<List<InvoiceListDto>>(response, BusinessMessages.INVOICE_BETWEEN_START_DATE_AND_END_DATE_LISTED_SUCCESSFULLY);
 
-
     }
 
+    @Override
+    public void setInvoiceFields(int rentId, Invoice invoice){
 
-    /*public DataResult<Double> CalculateDelayedDaysPrice(int rentId){
-        if(this.rentService.calculateDelayedDayPrice(rentId) != null) {
-            double totalPrice = this.rentService.calculateDelayedDayPrice(rentId).getData() + this.orderedAdditionalServiceService.calculateOrderedServicePrice(rentId);
+        Rent rent = this.rentService.getByRentId(rentId);
 
-            return new SuccessDataResult<Double>(totalPrice, "Ekstra günler için fatura fiyatlandırması oluşturuldu.");
-        }
-        return new ErrorDataResult<Double>("Gecikme yok.");
-    } */
+        double totalPrice = calculateAndSetTotalPrice(rentId);
 
+        invoice.setTotalPrice(totalPrice);
+
+        invoice.setRentReturnDate(rent.getRentReturnDate());
+
+        invoice.setRentStartDate(rent.getRentStartDate());
+
+        invoice.setTotalRentDay((int) (ChronoUnit.DAYS.between(rent.getRentStartDate(),rent.getRentReturnDate())));
+
+        invoice.setUser(rent.getUser());
+
+    }
 
 
     private double calculateIfCityIsDifferentPrice(int rentId){
@@ -167,23 +183,6 @@ public class InvoiceManager implements InvoiceService {
     }
 
 
-    private void setInvoiceFields(int rentId, Invoice invoice){
-
-        Rent rent = this.rentService.getRentByRentId(rentId);
-
-        double totalPrice = calculateAndSetTotalPrice(rentId);
-
-        invoice.setTotalPrice(totalPrice);
-
-        invoice.setRentReturnDate(rent.getRentReturnDate());
-
-        invoice.setRentStartDate(rent.getRentStartDate());
-
-        invoice.setTotalRentDay((int) (ChronoUnit.DAYS.between(rent.getRentStartDate(),rent.getRentReturnDate())));
-
-        invoice.setUser(rent.getUser());
-
-    }
 
 
 }

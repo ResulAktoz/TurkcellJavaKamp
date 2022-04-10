@@ -1,6 +1,7 @@
 package com.turkcell.rentacar.business.concretes;
 
 import com.turkcell.rentacar.business.abstracts.CreditCardInfoService;
+import com.turkcell.rentacar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentacar.business.requests.create.CreateCreditCardInfoRequest;
 import com.turkcell.rentacar.business.requests.delete.DeleteCreditCardInfoRequest;
 import com.turkcell.rentacar.business.requests.update.UpdateCreditCardInfoRequest;
@@ -34,7 +35,7 @@ public class CreditCardInfoManager implements CreditCardInfoService {
 
         this.creditCardInfoDao.save(creditCardInfo);
 
-        return new SuccessResult("Müşteri kart bilgisi eklendi.");
+        return new SuccessResult(BusinessMessages.CREDIT_CARD_INFO_ADDED_SUCCESFULLY);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class CreditCardInfoManager implements CreditCardInfoService {
 
         this.creditCardInfoDao.save(creditCardInfo);
 
-        return new SuccessResult("Kayıtlı kredi kartı başarıyla güncellendi");
+        return new SuccessResult(BusinessMessages.CREDIT_CARD_INFO_UPDATED_SUCCESFULLY);
 
     }
 
@@ -56,12 +57,12 @@ public class CreditCardInfoManager implements CreditCardInfoService {
 
         this.creditCardInfoDao.deleteById(deleteCreditCardInfoRequest.getCreditCardInfoId());
 
-        return new SuccessResult("Kayıtlı kredi kartı kaldırıldı.");
+        return new SuccessResult(BusinessMessages.CREDIT_CARD_INFO_DELETED_SUCCESFULLY);
     }
 
     private void checkIfCreditCardInfoExists(int infoId){
         if(!this.creditCardInfoDao.existsById(infoId)){
-            throw new BusinessException("Id'ye kayıtlı kart bulunamadı");
+            throw new BusinessException(BusinessMessages.CREDIT_CARD_INFO_NOT_FOUND);
         }
 
     }
